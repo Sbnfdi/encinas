@@ -304,5 +304,24 @@ div.framer-1dzcc9i {
   }, 10000);
 })();
 </script>
+
+<script>
+(function() {
+  function fixPropertyCards() {
+    var cards = document.querySelectorAll('.framer-1gaxgs .framer-o6jc2w-container');
+    cards.forEach(function(card) {
+      var img = card.querySelector('img');
+      if (img && img.getAttribute('src')) {
+        img.style.display = 'block';
+        img.style.objectFit = 'cover';
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', fixPropertyCards);
+  window.addEventListener('load', fixPropertyCards);
+  setTimeout(fixPropertyCards, 1000);
+})();
+</script>
+
 </body>
 </html>
