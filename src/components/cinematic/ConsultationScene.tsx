@@ -9,7 +9,7 @@ interface ConsultationSceneProps {
 }
 
 export const ConsultationScene: FC<ConsultationSceneProps> = ({
-  scene,
+  scene: _scene,
   onSubmitInquiry,
 }) => {
   const [formData, setFormData] = useState({

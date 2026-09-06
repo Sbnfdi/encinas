@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FC } from 'react';
 import type { Property } from '../../types';
-import { ChevronRight, Layers, MapPin, Sparkles, X } from 'lucide-react';
+import { ChevronRight, DollarSign, Layers, MapPin, Sparkles, X } from 'lucide-react';
 
 interface PropertyDetailModalProps {
   property: Property | null;

@@ -515,7 +515,7 @@ export function App() {
         communities={communities}
         developers={developers}
         onSelectProperty={(prop) => setSelectedProperty(prop)}
-        onInquireProperty={(prop) => {
+        onInquireProperty={(_prop) => {
           setSelectedProperty(null);
           scrollToConsultation();
         }}
@@ -638,7 +638,7 @@ export function App() {
       <PropertyDetailModal
         property={selectedProperty}
         onClose={() => setSelectedProperty(null)}
-        onInquire={(p) => {
+        onInquire={(_p) => {
           setSelectedProperty(null);
           scrollToConsultation();
         }}
