@@ -25,7 +25,7 @@ import { ConsultationScene } from './components/cinematic/ConsultationScene';
 import { PropertyExplorer } from './components/discovery/PropertyExplorer';
 import { PropertyDetailModal } from './components/discovery/PropertyDetailModal';
 import { AdminPortal } from './components/admin/AdminPortal';
-import { ArrowDown, Compass, Settings } from 'lucide-react';
+import { ArrowDown, Compass, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function App() {
   // PERSISTED CMS STATE
@@ -218,111 +218,199 @@ export function App() {
           left: 0,
           right: 0,
           zIndex: 60,
-          padding: 'clamp(0.75rem, 2vw, 1.1rem) clamp(0.85rem, 3vw, 3rem)',
+          padding: 'clamp(0.6rem, 1.8vw, 1rem) clamp(0.75rem, 2.5vw, 2.5rem)',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: 'column',
+          gap: '0.45rem',
           pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, rgba(7,7,7,0.85) 0%, transparent 100%)',
+          background: 'linear-gradient(to bottom, rgba(7,7,7,0.92) 0%, rgba(7,7,7,0.7) 70%, transparent 100%)',
         }}
       >
-        {/* Brand Identity */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-          <a
-            href="#scene-hero"
-            onClick={(e) => {
-              e.preventDefault();
-              jumpToScene(0);
-            }}
+        {/* Main Header Bar */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          {/* Brand Identity */}
+          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <a
+              href="#scene-hero"
+              onClick={(e) => {
+                e.preventDefault();
+                jumpToScene(0);
+              }}
+              style={{
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+              }}
+            >
+              <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)' }}>⚜️</span>
+              <span
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)',
+                  fontWeight: 800,
+                  letterSpacing: '0.18em',
+                  color: '#FFF',
+                }}
+              >
+                ENCINAS
+              </span>
+              <span
+                style={{
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'var(--gold-primary)',
+                  borderLeft: '1px solid rgba(255,255,255,0.2)',
+                  paddingLeft: '0.55rem',
+                  fontWeight: 600,
+                }}
+              >
+                DUBAI
+              </span>
+            </a>
+          </div>
+
+          {/* Center Minimal Active Scene Tracker (Desktop) */}
+          <div
+            className="hidden md:flex items-center gap-3 glass-pill"
             style={{
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
+              pointerEvents: 'auto',
+              padding: '0.4rem 1.1rem',
+              borderRadius: '9999px',
+              fontSize: '0.72rem',
+              letterSpacing: '0.16em',
+              color: 'var(--gold-light)',
             }}
           >
-            <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)' }}>⚜️</span>
-            <span
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)',
-                fontWeight: 800,
-                letterSpacing: '0.18em',
-                color: '#FFF',
-              }}
-            >
-              ENCINAS
+            <span style={{ opacity: 0.5, fontFamily: 'var(--font-serif)' }}>
+              SCENE {((currentSceneIndex + 1).toString().padStart(2, '0'))}
             </span>
-            <span
+            <span style={{ opacity: 0.3 }}>•</span>
+            <span style={{ fontWeight: 600 }}>{currentScene.title}</span>
+          </div>
+
+          {/* Right Actions: Sound Atmosphere + Admin Toggle + CTA */}
+          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.5vw, 0.75rem)' }}>
+            {/* Audio Ambience Synthesizer */}
+            <AudioAmbience />
+
+            {/* Admin CMS Switcher */}
+            <button
+              onClick={() => setIsAdminOpen(true)}
+              className="glass-pill"
               style={{
-                fontSize: '0.6rem',
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--gold-primary)',
-                borderLeft: '1px solid rgba(255,255,255,0.2)',
-                paddingLeft: '0.6rem',
-                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.45rem clamp(0.5rem, 1.2vw, 0.85rem)',
+                borderRadius: '9999px',
+                fontSize: '0.72rem',
+                letterSpacing: '0.12em',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer',
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
+              title="Open Operational Admin CMS & Story Builder"
             >
-              DUBAI
-            </span>
-          </a>
+              <Settings size={13} color="var(--gold-primary)" />
+              <span className="hidden sm:inline">CMS BUILDER</span>
+            </button>
+
+            {/* Direct Consultation CTA */}
+            <button
+              onClick={scrollToConsultation}
+              className="btn-gold"
+              style={{ padding: '0.45rem clamp(0.65rem, 1.8vw, 1.25rem)', fontSize: 'clamp(0.65rem, 1.6vw, 0.72rem)' }}
+            >
+              <span className="hidden sm:inline">CONSULTATION</span>
+              <span className="sm:hidden">CONSULT</span>
+            </button>
+          </div>
         </div>
 
-        {/* Center Minimal Active Scene Tracker */}
-        <div
-          className="hidden md:flex items-center gap-3 glass-pill"
-          style={{
-            pointerEvents: 'auto',
-            padding: '0.4rem 1.1rem',
-            borderRadius: '9999px',
-            fontSize: '0.72rem',
-            letterSpacing: '0.16em',
-            color: 'var(--gold-light)',
-          }}
-        >
-          <span style={{ opacity: 0.5, fontFamily: 'var(--font-serif)' }}>
-            SCENE {((currentSceneIndex + 1).toString().padStart(2, '0'))}
-          </span>
-          <span style={{ opacity: 0.3 }}>•</span>
-          <span style={{ fontWeight: 600 }}>{currentScene.title}</span>
-        </div>
-
-        {/* Right Actions: Sound Atmosphere + Admin Toggle + CTA */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.5vw, 0.75rem)' }}>
-          {/* Audio Ambience Synthesizer */}
-          <AudioAmbience />
-
-          {/* Admin CMS Switcher */}
-          <button
-            onClick={() => setIsAdminOpen(true)}
+        {/* Dedicated Scene Tracker (Mobile: prominent, touch-interactive with quick stepping) */}
+        <div className="flex md:hidden justify-center items-center w-full pointer-events-auto">
+          <div
+            onClick={() => jumpToScene(currentSceneIndex)}
             className="glass-pill"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '0.45rem',
-              padding: '0.45rem clamp(0.5rem, 1.2vw, 0.85rem)',
+              padding: '0.26rem 0.75rem',
               borderRadius: '9999px',
-              fontSize: '0.72rem',
+              fontSize: '0.68rem',
               letterSpacing: '0.12em',
-              color: 'var(--text-secondary)',
+              color: 'var(--gold-light)',
+              border: '1px solid rgba(197, 168, 128, 0.3)',
+              background: 'rgba(14, 13, 12, 0.88)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              maxWidth: '96vw',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
               cursor: 'pointer',
-              border: '1px solid rgba(255,255,255,0.1)',
             }}
-            title="Open Operational Admin CMS & Story Builder"
+            title="Current Scene - Tap to focus"
           >
-            <Settings size={13} color="var(--gold-primary)" />
-            <span className="hidden sm:inline">CMS BUILDER</span>
-          </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentSceneIndex > 0) jumpToScene(currentSceneIndex - 1);
+              }}
+              disabled={currentSceneIndex === 0}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: currentSceneIndex === 0 ? 'rgba(255,255,255,0.2)' : 'var(--gold-primary)',
+                cursor: currentSceneIndex === 0 ? 'default' : 'pointer',
+                padding: '0 2px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label="Previous scene"
+            >
+              <ChevronLeft size={13} />
+            </button>
 
-          {/* Direct Consultation CTA */}
-          <button
-            onClick={scrollToConsultation}
-            className="btn-gold"
-            style={{ padding: '0.45rem clamp(0.75rem, 1.8vw, 1.25rem)', fontSize: 'clamp(0.65rem, 1.6vw, 0.72rem)' }}
-          >
-            <span>CONSULTATION</span>
-          </button>
+            <span style={{ fontFamily: 'var(--font-serif)', color: 'var(--gold-primary)', fontWeight: 700, fontSize: '0.72rem' }}>
+              SCENE {((currentSceneIndex + 1).toString().padStart(2, '0'))}
+            </span>
+            <span style={{ opacity: 0.35 }}>•</span>
+            <span
+              style={{
+                fontWeight: 600,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '52vw',
+                color: 'var(--text-primary)',
+              }}
+            >
+              {currentScene.title}
+            </span>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentSceneIndex < activeScenes.length - 1) jumpToScene(currentSceneIndex + 1);
+              }}
+              disabled={currentSceneIndex === activeScenes.length - 1}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: currentSceneIndex === activeScenes.length - 1 ? 'rgba(255,255,255,0.2)' : 'var(--gold-primary)',
+                cursor: currentSceneIndex === activeScenes.length - 1 ? 'default' : 'pointer',
+                padding: '0 2px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label="Next scene"
+            >
+              <ChevronRight size={13} />
+            </button>
+          </div>
         </div>
       </header>
 

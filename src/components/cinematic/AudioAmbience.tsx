@@ -98,12 +98,12 @@ export const AudioAmbience: FC = () => {
   return (
     <button
       onClick={toggleAudio}
-      className="glass-pill flex items-center gap-2.5 px-3.5 py-2 rounded-full cursor-pointer text-xs uppercase tracking-widest transition-all"
+      className="glass-pill flex items-center cursor-pointer text-xs uppercase tracking-widest transition-all"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.65rem',
-        padding: '0.45rem 0.95rem',
+        gap: '0.45rem',
+        padding: '0.45rem clamp(0.55rem, 1.2vw, 0.95rem)',
         borderRadius: '9999px',
         color: isPlaying ? 'var(--gold-light)' : 'var(--text-secondary)',
         borderColor: isPlaying ? 'var(--border-gold)' : 'rgba(255,255,255,0.1)',
@@ -121,12 +121,12 @@ export const AudioAmbience: FC = () => {
             <span className="wave-bar" style={{ height: '10px' }} />
             <span className="wave-bar" style={{ height: '12px' }} />
           </div>
-          <span>ATMOSPHERE</span>
+          <span className="hidden sm:inline">ATMOSPHERE</span>
         </>
       ) : (
         <>
           <VolumeX size={14} style={{ opacity: 0.6 }} />
-          <span>SOUND: OFF</span>
+          <span className="hidden sm:inline">SOUND: OFF</span>
         </>
       )}
     </button>
