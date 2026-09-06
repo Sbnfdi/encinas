@@ -218,7 +218,7 @@ export function App() {
           left: 0,
           right: 0,
           zIndex: 60,
-          padding: '1.1rem 3vw',
+          padding: 'clamp(0.75rem, 2vw, 1.1rem) clamp(0.85rem, 3vw, 3rem)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -227,7 +227,7 @@ export function App() {
         }}
       >
         {/* Brand Identity */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           <a
             href="#scene-hero"
             onClick={(e) => {
@@ -238,16 +238,16 @@ export function App() {
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.65rem',
+              gap: '0.5rem',
             }}
           >
-            <span style={{ fontSize: '1.2rem' }}>⚜️</span>
+            <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)' }}>⚜️</span>
             <span
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '1.25rem',
+                fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)',
                 fontWeight: 800,
-                letterSpacing: '0.2em',
+                letterSpacing: '0.18em',
                 color: '#FFF',
               }}
             >
@@ -255,12 +255,12 @@ export function App() {
             </span>
             <span
               style={{
-                fontSize: '0.62rem',
-                letterSpacing: '0.24em',
+                fontSize: '0.6rem',
+                letterSpacing: '0.22em',
                 textTransform: 'uppercase',
                 color: 'var(--gold-primary)',
                 borderLeft: '1px solid rgba(255,255,255,0.2)',
-                paddingLeft: '0.75rem',
+                paddingLeft: '0.6rem',
                 fontWeight: 600,
               }}
             >
@@ -289,7 +289,7 @@ export function App() {
         </div>
 
         {/* Right Actions: Sound Atmosphere + Admin Toggle + CTA */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.5vw, 0.75rem)' }}>
           {/* Audio Ambience Synthesizer */}
           <AudioAmbience />
 
@@ -301,7 +301,7 @@ export function App() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.45rem',
-              padding: '0.45rem 0.85rem',
+              padding: '0.45rem clamp(0.5rem, 1.2vw, 0.85rem)',
               borderRadius: '9999px',
               fontSize: '0.72rem',
               letterSpacing: '0.12em',
@@ -319,7 +319,7 @@ export function App() {
           <button
             onClick={scrollToConsultation}
             className="btn-gold"
-            style={{ padding: '0.45rem 1.25rem', fontSize: '0.72rem' }}
+            style={{ padding: '0.45rem clamp(0.75rem, 1.8vw, 1.25rem)', fontSize: 'clamp(0.65rem, 1.6vw, 0.72rem)' }}
           >
             <span>CONSULTATION</span>
           </button>

@@ -65,6 +65,8 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          flexWrap: 'wrap',
+          gap: '1.25rem',
           marginBottom: '2rem',
           maxWidth: '1400px',
           width: '100%',
@@ -140,8 +142,8 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '3.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.75rem, 4vw, 3.5rem)',
             alignItems: 'center',
           }}
         >

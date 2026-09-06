@@ -155,12 +155,14 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
           className="glass-panel"
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 'clamp(1.5rem, 4vw, 3.5rem)',
-            padding: '0.9rem 2.5rem',
+            gap: 'clamp(0.9rem, 3vw, 3.5rem)',
+            padding: '0.85rem clamp(1rem, 3vw, 2.5rem)',
             borderRadius: '4px',
             border: '1px solid rgba(255,255,255,0.08)',
+            maxWidth: '100%',
           }}
         >
           {scene.stats?.map((stat, idx) => (
