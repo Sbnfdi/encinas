@@ -6,6 +6,7 @@ interface TimelineIndicatorProps {
   currentSceneIndex: number;
   globalProgress: number; // 0.0 to 1.0
   onSelectScene: (index: number) => void;
+  visible?: boolean;
 }
 
 export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
@@ -13,6 +14,7 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
   currentSceneIndex,
   globalProgress,
   onSelectScene,
+  visible = true,
 }) => {
   const getSceneShortLabel = (scene: TimelineScene) => {
     switch (scene.sceneType) {
@@ -35,12 +37,15 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
         position: 'fixed',
         left: '2.5rem',
         top: '50%',
-        transform: 'translateY(-50%)',
+        transform: visible ? 'translateY(-50%) translateX(0)' : 'translateY(-50%) translateX(-40px)',
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? 'auto' : 'none',
+        visibility: visible ? 'visible' : 'hidden',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'column',
         gap: '0.9rem',
-        pointerEvents: 'auto',
+        transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s',
       }}
     >
       {/* Desktop sleek vertical rail */}

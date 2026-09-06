@@ -55,6 +55,7 @@ export function App() {
   // SCROLL TIMELINE DRIVER
   const [globalProgress, setGlobalProgress] = useState<number>(0);
   const [currentSceneIndex, setCurrentSceneIndex] = useState<number>(0);
+  const [isHeroSection, setIsHeroSection] = useState<boolean>(true);
 
   // Specific progress for the pinned Property Reel section
   const propertyReelTrackRef = useRef<HTMLDivElement>(null);
@@ -84,6 +85,15 @@ export function App() {
     if (totalDocHeight > 0) {
       const progress = Math.min(1, Math.max(0, window.scrollY / totalDocHeight));
       setGlobalProgress(progress);
+    }
+
+    // Check if scrolled down past the hero section
+    const heroEl = document.getElementById('scene-hero');
+    if (heroEl) {
+      const rect = heroEl.getBoundingClientRect();
+      setIsHeroSection(rect.bottom > window.innerHeight * 0.35 && window.scrollY < window.innerHeight * 0.7);
+    } else {
+      setIsHeroSection(window.scrollY < 250);
     }
 
     // Track Property Reel internal horizontal progress
@@ -316,12 +326,13 @@ export function App() {
         </div>
       </header>
 
-      {/* Timeline Indicator Rail (Left Fixed Rail) */}
+      {/* Timeline Indicator Rail (Left Fixed Rail - visible only in hero section to avoid overlapping content) */}
       <TimelineIndicator
         scenes={activeScenes}
         currentSceneIndex={currentSceneIndex}
         globalProgress={globalProgress}
         onSelectScene={jumpToScene}
+        visible={isHeroSection && currentSceneIndex === 0}
       />
 
       {/* ================================================================ */}
