@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Property } from '../../types';
-import { Award, Bed, Calendar, Check, ChevronRight, DollarSign, Eye, Layers, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ChevronRight, DollarSign, Layers, MapPin, Sparkles, X } from 'lucide-react';
 
 interface PropertyDetailModalProps {
   property: Property | null;

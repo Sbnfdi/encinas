@@ -25,7 +25,7 @@ import { ConsultationScene } from './components/cinematic/ConsultationScene';
 import { PropertyExplorer } from './components/discovery/PropertyExplorer';
 import { PropertyDetailModal } from './components/discovery/PropertyDetailModal';
 import { AdminPortal } from './components/admin/AdminPortal';
-import { ArrowDown, Compass, Settings, Sparkles } from 'lucide-react';
+import { ArrowDown, Compass, Settings } from 'lucide-react';
 
 export function App() {
   // PERSISTED CMS STATE

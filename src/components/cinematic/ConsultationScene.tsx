@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { TimelineScene, ConsultationInquiry } from '../../types';
-import { Calendar, CheckCircle, Lock, Mail, MapPin, Phone, Send, ShieldCheck, Sparkles, User } from 'lucide-react';
+import { CheckCircle, Lock, Mail, MapPin, Phone, Send, ShieldCheck, Sparkles, User } from 'lucide-react';
 
 interface ConsultationSceneProps {
   scene: TimelineScene;

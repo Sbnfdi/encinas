@@ -1,30 +1,16 @@
 import React, { useState } from 'react';
 import type { TimelineScene, Property, Community, Developer, ConsultationInquiry, SceneType } from '../../types';
 import {
-  ArrowDown,
-  ArrowUp,
-  BarChart3,
-  Check,
-  Clock,
-  Compass,
   Edit,
   Eye,
   EyeOff,
   Film,
   Layers,
-  LayoutDashboard,
-  LogOut,
   Mail,
-  MoreVertical,
   MoveDown,
   MoveUp,
   Plus,
-  RotateCcw,
-  Search,
-  ShieldCheck,
-  Sparkles,
   Trash2,
-  UserCheck,
   X
 } from 'lucide-react';
 

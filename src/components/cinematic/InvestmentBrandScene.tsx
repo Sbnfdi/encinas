@@ -1,16 +1,16 @@
 import React from 'react';
 import type { TimelineScene } from '../../types';
-import { Award, Check, DollarSign, FileText, Globe, KeyRound, Lock, ShieldCheck, Sparkles } from 'lucide-react';
+import { Award, DollarSign, Globe, KeyRound, Lock, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface InvestmentBrandSceneProps {
   scene: TimelineScene;
-  progress: number; // 0.0 to 1.0 within track
+  progress?: number; // 0.0 to 1.0 within track
   onOpenConsultation: () => void;
 }
 
 export const InvestmentBrandScene: React.FC<InvestmentBrandSceneProps> = ({
   scene,
-  progress,
+  progress: _progress,
   onOpenConsultation,
 }) => {
   const isBrand = scene.sceneType === 'BRAND';

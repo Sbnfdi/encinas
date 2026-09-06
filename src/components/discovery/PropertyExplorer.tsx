@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import type { Property, FilterState, Community, Developer } from '../../types';
-import { Bed, ChevronRight, Eye, Filter, Layers, MapPin, RotateCcw, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { Bed, ChevronRight, Eye, Layers, MapPin, RotateCcw, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
 
 interface PropertyExplorerProps {
   properties: Property[];

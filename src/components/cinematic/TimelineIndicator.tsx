@@ -14,8 +14,6 @@ export const TimelineIndicator: React.FC<TimelineIndicatorProps> = ({
   globalProgress,
   onSelectScene,
 }) => {
-  const activeScene = scenes[currentSceneIndex] || scenes[0];
-
   const getSceneShortLabel = (scene: TimelineScene) => {
     switch (scene.sceneType) {
       case 'HERO': return 'DUBAI';

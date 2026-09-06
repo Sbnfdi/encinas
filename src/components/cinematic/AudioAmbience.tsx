@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { VolumeX } from 'lucide-react';
 
 export const AudioAmbience: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);

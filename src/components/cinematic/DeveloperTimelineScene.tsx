@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Developer } from '../../types';
-import { Award, CheckCircle2, ChevronRight, Crown, Sparkles } from 'lucide-react';
+import { Award, ChevronRight, Crown } from 'lucide-react';
 
 interface DeveloperTimelineSceneProps {
   developers: Developer[];
