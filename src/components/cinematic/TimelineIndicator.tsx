@@ -1,5 +1,5 @@
-import React from 'react';
 import type { TimelineScene } from '../../types';
+import type { FC } from 'react';
 
 interface TimelineIndicatorProps {
   scenes: TimelineScene[];
@@ -8,7 +8,7 @@ interface TimelineIndicatorProps {
   onSelectScene: (index: number) => void;
 }
 
-export const TimelineIndicator: React.FC<TimelineIndicatorProps> = ({
+export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
   scenes,
   currentSceneIndex,
   globalProgress,

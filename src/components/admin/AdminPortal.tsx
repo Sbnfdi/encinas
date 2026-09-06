@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FC, FormEvent } from 'react';
 import type { TimelineScene, Property, Community, Developer, ConsultationInquiry, SceneType } from '../../types';
 import {
   Edit,
@@ -27,14 +28,14 @@ interface AdminPortalProps {
   onPreviewScene: (sceneIndex: number) => void;
 }
 
-export const AdminPortal: React.FC<AdminPortalProps> = ({
+export const AdminPortal: FC<AdminPortalProps> = ({
   timelineScenes,
   properties,
-  communities,
-  developers,
+  communities: _communities,
+  developers: _developers,
   inquiries,
   onUpdateScenes,
-  onUpdateProperties,
+  onUpdateProperties: _onUpdateProperties,
   onUpdateInquiries,
   onCloseAdmin,
   onPreviewScene,
@@ -44,10 +45,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Timeline Editing state
   const [editingScene, setEditingScene] = useState<TimelineScene | null>(null);
   const [isCreatingScene, setIsCreatingScene] = useState(false);
-
-  // Property Editing state
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const [isCreatingProperty, setIsCreatingProperty] = useState(false);
 
   // Filter state for inquiries
   const [inquiryStatusFilter, setInquiryStatusFilter] = useState<string>('ALL');
@@ -79,7 +76,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     }
   };
 
-  const saveScene = (e: React.FormEvent) => {
+  const saveScene = (e: FormEvent) => {
     e.preventDefault();
     if (!editingScene) return;
 

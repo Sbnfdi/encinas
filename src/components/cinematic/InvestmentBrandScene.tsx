@@ -1,5 +1,5 @@
-import React from 'react';
 import type { TimelineScene } from '../../types';
+import type { FC } from 'react';
 import { Award, DollarSign, Globe, KeyRound, Lock, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface InvestmentBrandSceneProps {
@@ -8,7 +8,7 @@ interface InvestmentBrandSceneProps {
   onOpenConsultation: () => void;
 }
 
-export const InvestmentBrandScene: React.FC<InvestmentBrandSceneProps> = ({
+export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
   scene,
   progress: _progress,
   onOpenConsultation,

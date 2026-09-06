@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FC, FormEvent } from 'react';
 import type { TimelineScene, ConsultationInquiry } from '../../types';
 import { CheckCircle, Lock, Mail, MapPin, Phone, Send, ShieldCheck, Sparkles, User } from 'lucide-react';
 
@@ -7,7 +8,7 @@ interface ConsultationSceneProps {
   onSubmitInquiry: (inquiry: Omit<ConsultationInquiry, 'id' | 'createdAt' | 'status'>) => Promise<boolean>;
 }
 
-export const ConsultationScene: React.FC<ConsultationSceneProps> = ({
+export const ConsultationScene: FC<ConsultationSceneProps> = ({
   scene,
   onSubmitInquiry,
 }) => {
@@ -26,7 +27,7 @@ export const ConsultationScene: React.FC<ConsultationSceneProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.email || !formData.phone) return;
 

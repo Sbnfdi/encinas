@@ -1,5 +1,5 @@
-import React from 'react';
 import type { Developer } from '../../types';
+import type { FC } from 'react';
 import { Award, ChevronRight, Crown } from 'lucide-react';
 
 interface DeveloperTimelineSceneProps {
@@ -8,7 +8,7 @@ interface DeveloperTimelineSceneProps {
   onSelectDeveloper: (developer: Developer) => void;
 }
 
-export const DeveloperTimelineScene: React.FC<DeveloperTimelineSceneProps> = ({
+export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
   developers,
   progress,
   onSelectDeveloper,

@@ -1,5 +1,6 @@
-import React from 'react';
+
 import type { Community } from '../../types';
+import type { FC } from 'react';
 import { ArrowUpRight, Compass, DollarSign, MapPin, Sparkles, TrendingUp } from 'lucide-react';
 
 interface CommunityTimelineSceneProps {
@@ -8,7 +9,7 @@ interface CommunityTimelineSceneProps {
   onSelectCommunity: (community: Community) => void;
 }
 
-export const CommunityTimelineScene: React.FC<CommunityTimelineSceneProps> = ({
+export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
   communities,
   progress,
   onSelectCommunity,

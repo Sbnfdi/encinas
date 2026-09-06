@@ -1,5 +1,7 @@
-import React from 'react';
+
 import type { Property } from '../../types';
+import { useState } from 'react';
+import type { FC } from 'react';
 import { ArrowRight, Bed, Eye, Layers, MapPin, Sparkles } from 'lucide-react';
 
 interface PropertyReelSceneProps {
@@ -9,7 +11,7 @@ interface PropertyReelSceneProps {
   onInquire: (property: Property) => void;
 }
 
-export const PropertyReelScene: React.FC<PropertyReelSceneProps> = ({
+export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
   properties,
   progress,
   onSelectProperty,
@@ -19,7 +21,7 @@ export const PropertyReelScene: React.FC<PropertyReelSceneProps> = ({
   const featured = properties.slice(0, 3);
   const count = featured.length;
 
-  const [userSelectedIdx, setUserSelectedIdx] = React.useState<number | null>(null);
+  const [userSelectedIdx, setUserSelectedIdx] = useState<number | null>(null);
 
   const rawIndex = progress * (count - 1);
   const computedIdx = Math.min(count - 1, Math.max(0, Math.floor(rawIndex)));

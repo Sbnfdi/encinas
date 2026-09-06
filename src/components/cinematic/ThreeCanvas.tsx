@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import type { FC } from 'react';
 
 interface ThreeCanvasProps {
   scrollProgress: number; // 0.0 to 1.0
   reducedMotion?: boolean;
 }
 
-export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ scrollProgress, reducedMotion = false }) => {
+export const ThreeCanvas: FC<ThreeCanvasProps> = ({ scrollProgress, reducedMotion = false }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(scrollProgress);
   progressRef.current = scrollProgress;
@@ -166,7 +167,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ scrollProgress, reduce
     let currentCamZ = 55;
     let currentLookY = 12;
 
-    let reqId: number;
+    let reqId = 0;
     const startTime = performance.now();
 
     const animate = () => {

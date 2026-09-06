@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FC } from 'react';
 import type { Property } from '../../types';
-import { ChevronRight, DollarSign, Layers, MapPin, Sparkles, X } from 'lucide-react';
+import { ChevronRight, Layers, MapPin, Sparkles, X } from 'lucide-react';
 
 interface PropertyDetailModalProps {
   property: Property | null;
@@ -8,7 +9,7 @@ interface PropertyDetailModalProps {
   onInquire: (property: Property) => void;
 }
 
-export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
+export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
   property,
   onClose,
   onInquire,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import type {
   TimelineScene,
   Property,
@@ -67,60 +67,70 @@ export function App() {
 
   // Global scroll listener & Intersection Observer for timeline scenes
   useEffect(() => {
-    const sceneIds = [
-      'scene-hero',
-      'scene-properties',
-      'scene-communities',
-      'scene-developers',
-      'scene-investment',
-      'scene-philosophy',
-      'scene-consultation',
-      'property-discovery',
-    ];
+  const sceneIds = [
+    'scene-hero',
+    'scene-properties',
+    'scene-communities',
+    'scene-developers',
+    'scene-investment',
+    'scene-philosophy',
+    'scene-consultation',
+    'property-discovery',
+  ];
 
-    let ticking = false;
+  // Scroll handler for global progress and property reel progress
+  const handleScroll = () => {
+    const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (totalDocHeight > 0) {
+      const progress = Math.min(1, Math.max(0, window.scrollY / totalDocHeight));
+      setGlobalProgress(progress);
+    }
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
-          if (totalDocHeight > 0) {
-            const progress = Math.min(1, Math.max(0, window.scrollY / totalDocHeight));
-            setGlobalProgress(progress);
-          }
-
-          // Track Property Reel internal horizontal progress
-          const reelTrack = propertyReelTrackRef.current;
-          if (reelTrack) {
-            const rect = reelTrack.getBoundingClientRect();
-            const trackScrollable = rect.height - window.innerHeight;
-            if (trackScrollable > 0) {
-              const scrolledInTrack = -rect.top;
-              const p = Math.min(1, Math.max(0, scrolledInTrack / trackScrollable));
-              setPropertyReelProgress(p);
-            }
-          }
-
-          // Identify active scene based on viewport position
-          const scrollPos = window.scrollY + window.innerHeight * 0.35;
-          for (let i = sceneIds.length - 1; i >= 0; i--) {
-            const el = document.getElementById(sceneIds[i]);
-            if (el && el.offsetTop <= scrollPos) {
-              setCurrentSceneIndex(Math.min(activeScenes.length - 1, i));
-              break;
-            }
-          }
-
-          ticking = false;
-        });
-        ticking = true;
+    // Track Property Reel internal horizontal progress
+    const reelTrack = propertyReelTrackRef.current;
+    if (reelTrack) {
+      const rect = reelTrack.getBoundingClientRect();
+      const trackScrollable = rect.height - window.innerHeight;
+      if (trackScrollable > 0) {
+        const scrolledInTrack = -rect.top;
+        const p = Math.min(1, Math.max(0, scrolledInTrack / trackScrollable));
+        setPropertyReelProgress(p);
       }
-    };
+    }
+  };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeScenes.length]);
+  // IntersectionObserver for determining the active scene
+  const sceneElements = sceneIds
+    .map((id) => document.getElementById(id))
+    .filter(Boolean) as HTMLElement[];
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = sceneIds.indexOf(entry.target.id);
+          if (idx !== -1) {
+            setCurrentSceneIndex(Math.min(activeScenes.length - 1, idx));
+          }
+        }
+      });
+    },
+    {
+      root: null,
+      threshold: 0.35,
+    }
+  );
+
+  sceneElements.forEach((el) => observer.observe(el));
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  // Initialise on mount
+  handleScroll();
+
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+    observer.disconnect();
+  };
+}, [activeScenes.length]);
 
   // Persist state updates
   const handleUpdateScenes = (updated: TimelineScene[]) => {

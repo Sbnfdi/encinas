@@ -1,5 +1,6 @@
-import React from 'react';
+
 import type { TimelineScene } from '../../types';
+import type { FC } from 'react';
 import { ArrowDown, Sparkles } from 'lucide-react';
 
 interface HeroTimelineSceneProps {
@@ -8,7 +9,7 @@ interface HeroTimelineSceneProps {
   onExploreClick: () => void;
 }
 
-export const HeroTimelineScene: React.FC<HeroTimelineSceneProps> = ({
+export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
   scene,
   progress,
   onExploreClick,
