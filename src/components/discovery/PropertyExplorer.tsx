@@ -81,7 +81,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         zIndex: 20,
         backgroundColor: '#070707',
         borderTop: '1px solid var(--border-gold)',
-        padding: '6rem 4vw',
+        padding: 'clamp(3rem, 6vh, 4.5rem) clamp(1rem, 4vw, 3rem)',
       }}
     >
       <div style={{ maxWidth: '1400px', width: '100%', margin: '0 auto' }}>

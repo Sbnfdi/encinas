@@ -26,7 +26,7 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '7rem 4vw 5rem 4vw',
+        padding: 'clamp(5.5rem, 11vh, 7.5rem) clamp(1rem, 4vw, 2.5rem) clamp(2.5rem, 6vh, 4rem) clamp(1rem, 4vw, 2.5rem)',
         overflow: 'hidden',
         boxSizing: 'border-box',
       }}
@@ -50,7 +50,7 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
         style={{
           position: 'relative',
           zIndex: 20,
-          maxWidth: '960px',
+          maxWidth: '880px',
           width: '100%',
           margin: '0 auto',
           textAlign: 'center',
@@ -79,13 +79,13 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
         <h1
           style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(2.4rem, 5.5vw, 4.6rem)',
-            lineHeight: 1.12,
+            fontSize: 'clamp(1.85rem, 4.5vw, 3.8rem)',
+            lineHeight: 1.15,
             fontWeight: 700,
             letterSpacing: '0.04em',
             textAlign: 'center',
-            marginBottom: '1.5rem',
-            maxWidth: '900px',
+            marginBottom: '1.25rem',
+            maxWidth: '820px',
           }}
         >
           <span className="gold-gradient-text">REAL ESTATE WITHOUT COMPROMISE.</span>
@@ -95,12 +95,12 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
         <p
           style={{
             fontFamily: 'var(--font-sans)',
-            fontSize: 'clamp(0.95rem, 1.25vw, 1.15rem)',
+            fontSize: 'clamp(0.9rem, 1.15vw, 1.05rem)',
             color: 'var(--text-secondary)',
-            maxWidth: '620px',
+            maxWidth: '560px',
             lineHeight: 1.7,
             fontWeight: 300,
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
           }}
         >
           Where sovereign capital commands private crystal archipelagoes, sky-high penthouses, and irreplaceable trophy estates.
@@ -112,7 +112,7 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
             onClick={onExploreClick}
             aria-label="Explore curated Dubai residences"
             className="btn-gold"
-            style={{ minWidth: '220px', padding: '0.9rem 2rem' }}
+            style={{ minWidth: '200px', padding: '0.85rem 1.8rem' }}
           >
             <span>EXPLORE RESIDENCES</span>
             <ArrowDown size={14} aria-hidden="true" />

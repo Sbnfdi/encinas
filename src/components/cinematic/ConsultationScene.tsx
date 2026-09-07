@@ -46,11 +46,11 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '100vh',
+        minHeight: 'auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '6rem 4vw',
+        padding: '1rem clamp(1rem, 4vw, 3rem)',
       }}
     >
       <div

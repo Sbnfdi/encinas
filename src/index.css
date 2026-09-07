@@ -352,6 +352,18 @@ input::placeholder, textarea::placeholder {
   .lg\:hidden { display: none !important; }
 }
 
+@media (max-width: 1279px) {
+  .xl\:flex { display: none !important; }
+  .xl\:block { display: none !important; }
+  .xl\:hidden { display: block !important; }
+}
+
+@media (min-width: 1280px) {
+  .xl\:flex { display: flex !important; }
+  .xl\:block { display: block !important; }
+  .xl\:hidden { display: none !important; }
+}
+
 /* Reduced Motion preferences */
 @media (prefers-reduced-motion: reduce) {
   * {

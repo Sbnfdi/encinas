@@ -318,10 +318,10 @@ export function App() {
           </span>
         </a>
 
-        {/* Center Desktop Editorial Navigation Links */}
+        {/* Center Desktop Editorial Navigation Links: visible on >= 1280px */}
         <nav
           aria-label="Primary Navigation"
-          className="lg:flex hidden items-center gap-8"
+          className="xl:flex hidden items-center gap-6"
         >
           {[
             { label: 'Residences', id: 'scene-properties', index: 1 },
@@ -350,6 +350,7 @@ export function App() {
                   padding: '0.35rem 0',
                   position: 'relative',
                   transition: 'color 0.25s ease',
+                  whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold-light)')}
                 onMouseLeave={(e) => {
@@ -376,11 +377,11 @@ export function App() {
           })}
         </nav>
 
-        {/* Right Actions: Currency Selector + Sound + CMS Access + CTA + Mobile Hamburger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.45rem, 1.2vw, 0.85rem)' }}>
-          {/* Multi-Currency Toggle */}
+        {/* Right Actions: Currency Selector + Sound + CMS Access + CTA + Menu Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1vw, 0.75rem)', flexShrink: 0 }}>
+          {/* Multi-Currency Toggle - displayed on xl screens only to avoid header crowding */}
           <div
-            className="glass-pill sm:inline-flex hidden"
+            className="glass-pill xl:inline-flex hidden"
             style={{
               alignItems: 'center',
               padding: '2px',
@@ -402,8 +403,8 @@ export function App() {
                   border: 'none',
                   color: currency === c ? 'var(--gold-light)' : 'var(--text-dim)',
                   borderRadius: '9999px',
-                  padding: '0.22rem 0.55rem',
-                  fontSize: '0.66rem',
+                  padding: '0.2rem 0.5rem',
+                  fontSize: '0.64rem',
                   letterSpacing: '0.08em',
                   fontWeight: currency === c ? 700 : 500,
                   cursor: 'pointer',
@@ -426,18 +427,18 @@ export function App() {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.45rem clamp(0.55rem, 1.2vw, 0.85rem)',
+              gap: '0.4rem',
+              padding: '0.45rem clamp(0.55rem, 1vw, 0.75rem)',
               borderRadius: '9999px',
-              fontSize: '0.72rem',
-              letterSpacing: '0.12em',
+              fontSize: '0.7rem',
+              letterSpacing: '0.1em',
               color: isAuthenticated ? 'var(--gold-light)' : 'var(--text-secondary)',
               cursor: 'pointer',
               border: isAuthenticated ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.1)',
             }}
           >
             {isAuthenticated ? <Settings size={13} color="var(--gold-primary)" /> : <Lock size={12} color="var(--gold-primary)" />}
-            <span className="md:inline hidden">CMS BUILDER</span>
+            <span className="xl:inline hidden">CMS</span>
           </button>
 
           {/* Direct Consultation CTA */}
@@ -445,21 +446,26 @@ export function App() {
             onClick={scrollToConsultation}
             aria-label="Request confidential advisory consultation"
             className="btn-gold"
-            style={{ padding: '0.48rem clamp(0.75rem, 1.8vw, 1.35rem)', fontSize: 'clamp(0.68rem, 1.6vw, 0.74rem)', letterSpacing: '0.12em' }}
+            style={{
+              padding: '0.48rem clamp(0.65rem, 1.4vw, 1.15rem)',
+              fontSize: '0.72rem',
+              letterSpacing: '0.12em',
+              whiteSpace: 'nowrap',
+            }}
           >
             <span>PRIVATE ADVISORY</span>
           </button>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile & Tablet Menu Toggle Button (< 1280px) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            className="lg:hidden glass-pill"
+            className="xl:hidden glass-pill"
             style={{
-              width: '42px',
-              height: '42px',
+              width: '38px',
+              height: '38px',
               borderRadius: '2px',
               display: 'inline-flex',
               alignItems: 'center',
@@ -468,9 +474,10 @@ export function App() {
               color: 'var(--gold-light)',
               border: '1px solid rgba(255,255,255,0.15)',
               background: 'rgba(12, 12, 12, 0.75)',
+              flexShrink: 0,
             }}
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </header>
@@ -614,7 +621,7 @@ export function App() {
         ref={propertyReelTrackRef}
         style={{
           position: 'relative',
-          height: '240vh',
+          height: '135vh',
           zIndex: 15,
         }}
       >
@@ -648,12 +655,12 @@ export function App() {
         id="scene-communities"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 15,
-          padding: '6rem 0',
+          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
         }}
       >
         <CommunityTimelineScene
@@ -670,12 +677,12 @@ export function App() {
         id="scene-developers"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 15,
-          padding: '6rem 0',
+          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
         }}
       >
         <DeveloperTimelineScene
@@ -692,12 +699,12 @@ export function App() {
         id="scene-investment"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 15,
-          padding: '6rem 0',
+          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
         }}
       >
         {investmentScene && (
@@ -716,12 +723,12 @@ export function App() {
         id="scene-philosophy"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 15,
-          padding: '6rem 0',
+          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
         }}
       >
         {philosophyScene && (
@@ -740,11 +747,12 @@ export function App() {
         id="scene-consultation"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 15,
+          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
         }}
       >
         {consultationScene && (
@@ -761,12 +769,12 @@ export function App() {
           position: 'relative',
           zIndex: 25,
           textAlign: 'center',
-          padding: '5rem 1rem 3rem 1rem',
+          padding: '2.5rem 1rem 1.5rem 1rem',
           background: 'linear-gradient(to bottom, transparent, #070707)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '1.25rem',
+          gap: '1rem',
         }}
       >
         <div style={{ width: '48px', height: '1px', background: 'var(--gold-primary)', opacity: 0.6 }} />

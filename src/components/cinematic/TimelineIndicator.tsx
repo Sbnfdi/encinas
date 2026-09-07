@@ -19,6 +19,7 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
   visible = true,
 }) => {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const getSceneShortLabel = (scene: TimelineScene) => {
     switch (scene.sceneType) {
@@ -51,93 +52,119 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
   return (
     <>
       {/* ================================================================ */}
-      {/* DESKTOP SLEEK VERTICAL RAIL (visible on md: screens and above)    */}
+      {/* DESKTOP SLEEK VERTICAL RAIL (visible only on xl screens >= 1280px)*/}
+      {/* Ultra-compact 24px footprint - never overlaps section content    */}
       {/* ================================================================ */}
       <nav
-        aria-label="Timeline desktop navigation"
-        className="hidden md:flex flex-col"
+        aria-label="Timeline scene indicator rail"
+        className="hidden xl:flex flex-col"
         style={{
           position: 'fixed',
-          left: 'clamp(0.75rem, 1.8vw, 1.8rem)',
+          left: '1.25rem',
           top: '50%',
           transform: 'translateY(-50%)',
           opacity: visible ? 1 : 0,
           pointerEvents: visible ? 'auto' : 'none',
-          zIndex: 50,
-          gap: '0.75rem',
+          zIndex: 45,
+          gap: '0.65rem',
           transition: 'opacity 0.4s ease, transform 0.4s ease',
         }}
       >
         {scenes.map((scene, idx) => {
           const isActive = idx === currentSceneIndex;
           const isPassed = idx < currentSceneIndex;
+          const isHovered = hoveredIdx === idx;
           const orderNum = (idx + 1).toString().padStart(2, '0');
 
           return (
-            <button
+            <div
               key={scene.id}
-              onClick={() => onSelectScene(idx)}
-              className="group"
-              style={{
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.25rem 0',
-                textAlign: 'left',
-                outline: 'none',
-              }}
-              title={`Scene ${orderNum}: ${scene.title}`}
+              style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Minimalist Micro Bar */}
-              <div
+              <button
+                onClick={() => onSelectScene(idx)}
+                onFocus={() => setHoveredIdx(idx)}
+                onBlur={() => setHoveredIdx(null)}
+                aria-label={`Jump to Scene ${orderNum}: ${scene.title}`}
+                aria-current={isActive ? 'step' : undefined}
                 style={{
-                  width: isActive ? '24px' : '10px',
-                  height: '2px',
-                  backgroundColor: isActive
-                    ? 'var(--gold-primary)'
-                    : isPassed
-                    ? 'rgba(197, 168, 128, 0.45)'
-                    : 'rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                  boxShadow: isActive ? '0 0 10px rgba(197, 168, 128, 0.7)' : 'none',
-                }}
-              />
-
-              {/* Label: Subtle on inactive, highlighted on active */}
-              <div
-                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem',
-                  fontSize: '0.64rem',
-                  letterSpacing: '0.16em',
-                  fontFamily: 'var(--font-sans)',
-                  color: isActive ? 'var(--gold-light)' : 'rgba(255, 255, 255, 0.35)',
-                  opacity: isActive ? 1 : 0.4,
-                  transform: isActive ? 'translateX(2px)' : 'none',
-                  transition: 'all 0.25s ease',
-                  fontWeight: isActive ? 600 : 400,
-                  whiteSpace: 'nowrap',
+                  justifyContent: 'flex-start',
+                  padding: '0.4rem 0.2rem',
+                  outline: 'none',
+                  minHeight: '24px',
+                  width: '32px',
                 }}
               >
-                <span style={{ fontFamily: 'var(--font-serif)', color: isActive ? 'var(--gold-primary)' : 'inherit' }}>
+                {/* Ultra-Minimal Micro Bar */}
+                <div
+                  style={{
+                    width: isActive ? '24px' : isHovered ? '18px' : isPassed ? '10px' : '7px',
+                    height: isActive ? '3px' : '2px',
+                    backgroundColor: isActive
+                      ? 'var(--gold-primary)'
+                      : isHovered
+                      ? 'var(--gold-light)'
+                      : isPassed
+                      ? 'rgba(197, 168, 128, 0.4)'
+                      : 'rgba(255, 255, 255, 0.2)',
+                    borderRadius: '2px',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: isActive ? '0 0 10px rgba(197, 168, 128, 0.8)' : 'none',
+                  }}
+                />
+              </button>
+
+              {/* Floating Luxury Tooltip on Hover / Focus Only (Zero Layout Overlap) */}
+              <div
+                role="tooltip"
+                style={{
+                  position: 'absolute',
+                  left: '34px',
+                  opacity: isHovered ? 1 : 0,
+                  transform: isHovered ? 'translateX(0)' : 'translateX(-6px)',
+                  pointerEvents: 'none',
+                  transition: 'opacity 0.2s ease, transform 0.2s ease',
+                  backgroundColor: 'rgba(14, 13, 12, 0.95)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  border: '1px solid var(--border-gold)',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.85), 0 0 10px rgba(197, 168, 128, 0.2)',
+                  borderRadius: '2px',
+                  padding: '0.35rem 0.75rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.55rem',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.14em',
+                  whiteSpace: 'nowrap',
+                  zIndex: 60,
+                }}
+              >
+                <span style={{ fontFamily: 'var(--font-serif)', color: 'var(--gold-primary)', fontWeight: 700 }}>
                   {orderNum}
                 </span>
-                <span>{getSceneShortLabel(scene)}</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
+                <span style={{ color: 'var(--gold-pale)', fontWeight: 600, textTransform: 'uppercase' }}>
+                  {getSceneShortLabel(scene)}
+                </span>
               </div>
-            </button>
+            </div>
           );
         })}
       </nav>
 
       {/* ================================================================ */}
-      {/* MOBILE INTERACTIVE TIMELINE SCRUBBER (visible on mobile only)    */}
+      {/* MOBILE & TABLET INTERACTIVE SCRUBBER (visible on < xl screens)    */}
       {/* ================================================================ */}
       <div
-        className="md:hidden"
+        className="xl:hidden"
         style={{
           position: 'fixed',
           bottom: '1.25rem',

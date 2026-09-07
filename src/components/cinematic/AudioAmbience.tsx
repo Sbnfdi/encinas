@@ -122,12 +122,12 @@ export const AudioAmbience: FC = () => {
             <span className="wave-bar" style={{ height: '10px' }} />
             <span className="wave-bar" style={{ height: '12px' }} />
           </div>
-          <span className="sm:inline hidden">ATMOSPHERE</span>
+          <span className="xl:inline hidden">ATMOSPHERE</span>
         </>
       ) : (
         <>
           <VolumeX size={14} style={{ opacity: 0.6 }} aria-hidden="true" />
-          <span className="sm:inline hidden">SOUND: OFF</span>
+          <span className="xl:inline hidden">SOUND</span>
         </>
       )}
     </button>
