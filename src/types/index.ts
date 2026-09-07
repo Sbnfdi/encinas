@@ -125,3 +125,35 @@ export const SCENE_TYPES = [
   'CTA'
 ] as const;
 
+export type Currency = 'AED' | 'USD' | 'EUR' | 'GBP';
+
+export const CURRENCY_RATES: Record<Currency, number> = {
+  AED: 1,
+  USD: 3.6725,
+  EUR: 4.02,
+  GBP: 4.70,
+};
+
+export const CURRENCY_SYMBOLS: Record<Currency, string> = {
+  AED: 'AED',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+};
+
+export function formatPriceInCurrency(priceAED: number, currency: Currency): string {
+  const rate = CURRENCY_RATES[currency] || 1;
+  const converted = priceAED / rate;
+  const symbol = CURRENCY_SYMBOLS[currency];
+
+  if (converted >= 1_000_000) {
+    const millions = (converted / 1_000_000).toFixed(1);
+    return currency === 'AED' ? `AED ${millions}M` : `${symbol}${millions}M`;
+  }
+  if (converted >= 1_000) {
+    const thousands = (converted / 1_000).toFixed(0);
+    return currency === 'AED' ? `AED ${thousands}K` : `${symbol}${thousands}K`;
+  }
+  return currency === 'AED' ? `AED ${Math.round(converted).toLocaleString()}` : `${symbol}${Math.round(converted).toLocaleString()}`;
+}
+

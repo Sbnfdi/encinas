@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { FC } from 'react';
 import { ChevronLeft, ChevronRight, ChevronUp, Layers, X } from 'lucide-react';
 import type { TimelineScene } from '../../types';
@@ -19,13 +19,6 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
   visible = true,
 }) => {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-
-  // Close mobile drawer if indicator becomes invisible
-  useEffect(() => {
-    if (!visible) {
-      setIsMobileDrawerOpen(false);
-    }
-  }, [visible]);
 
   const getSceneShortLabel = (scene: TimelineScene) => {
     switch (scene.sceneType) {
@@ -65,15 +58,14 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
         className="hidden md:flex flex-col"
         style={{
           position: 'fixed',
-          left: 'clamp(1rem, 2.5vw, 2.5rem)',
+          left: 'clamp(0.75rem, 1.8vw, 1.8rem)',
           top: '50%',
-          transform: visible ? 'translateY(-50%) translateX(0)' : 'translateY(-50%) translateX(-40px)',
+          transform: 'translateY(-50%)',
           opacity: visible ? 1 : 0,
           pointerEvents: visible ? 'auto' : 'none',
-          visibility: visible ? 'visible' : 'hidden',
           zIndex: 50,
-          gap: '0.85rem',
-          transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s',
+          gap: '0.75rem',
+          transition: 'opacity 0.4s ease, transform 0.4s ease',
         }}
       >
         {scenes.map((scene, idx) => {
@@ -85,53 +77,55 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
             <button
               key={scene.id}
               onClick={() => onSelectScene(idx)}
+              className="group"
               style={{
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.9rem',
-                padding: '0.35rem 0',
+                gap: '0.75rem',
+                padding: '0.25rem 0',
                 textAlign: 'left',
                 outline: 'none',
               }}
-              title={`Jump to Scene ${orderNum}: ${scene.title}`}
+              title={`Scene ${orderNum}: ${scene.title}`}
             >
-              {/* Indicator Node */}
+              {/* Minimalist Micro Bar */}
               <div
                 style={{
-                  position: 'relative',
-                  width: isActive ? '28px' : '14px',
+                  width: isActive ? '24px' : '10px',
                   height: '2px',
                   backgroundColor: isActive
                     ? 'var(--gold-primary)'
                     : isPassed
                     ? 'rgba(197, 168, 128, 0.45)'
                     : 'rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                   boxShadow: isActive ? '0 0 10px rgba(197, 168, 128, 0.7)' : 'none',
                 }}
               />
 
-              {/* Label & Number */}
+              {/* Label: Subtle on inactive, highlighted on active */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.18em',
+                  gap: '0.4rem',
+                  fontSize: '0.64rem',
+                  letterSpacing: '0.16em',
                   fontFamily: 'var(--font-sans)',
-                  color: isActive ? 'var(--gold-light)' : 'rgba(255, 255, 255, 0.4)',
-                  opacity: isActive ? 1 : 0.45,
-                  transform: isActive ? 'translateX(4px)' : 'none',
-                  transition: 'all 0.35s ease',
+                  color: isActive ? 'var(--gold-light)' : 'rgba(255, 255, 255, 0.35)',
+                  opacity: isActive ? 1 : 0.4,
+                  transform: isActive ? 'translateX(2px)' : 'none',
+                  transition: 'all 0.25s ease',
                   fontWeight: isActive ? 600 : 400,
                   whiteSpace: 'nowrap',
                 }}
               >
-                <span style={{ fontFamily: 'var(--font-serif)', opacity: isActive ? 1 : 0.6 }}>{orderNum}</span>
+                <span style={{ fontFamily: 'var(--font-serif)', color: isActive ? 'var(--gold-primary)' : 'inherit' }}>
+                  {orderNum}
+                </span>
                 <span>{getSceneShortLabel(scene)}</span>
               </div>
             </button>
@@ -276,7 +270,7 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
       {/* ================================================================ */}
       {/* MOBILE TIMELINE QUICK-JUMP DRAWER / MODAL                        */}
       {/* ================================================================ */}
-      {isMobileDrawerOpen && (
+      {visible && isMobileDrawerOpen && (
         <div
           className="md:hidden"
           style={{

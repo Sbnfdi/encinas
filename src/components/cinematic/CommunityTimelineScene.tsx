@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import type { Community } from '../../types';
 import type { FC } from 'react';
 import { ArrowUpRight, Compass, DollarSign, MapPin, Sparkles, TrendingUp } from 'lucide-react';
@@ -14,10 +15,12 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
   progress,
   onSelectCommunity,
 }) => {
+  const [userSelectedIdx, setUserSelectedIdx] = useState<number | null>(null);
   const count = communities.length;
   const rawIdx = progress * (count - 1);
-  const activeIdx = Math.min(count - 1, Math.max(0, Math.floor(rawIdx)));
-  const frac = rawIdx - activeIdx;
+  const scrollComputedIdx = Math.min(count - 1, Math.max(0, Math.floor(rawIdx)));
+  const activeIdx = userSelectedIdx !== null ? userSelectedIdx : scrollComputedIdx;
+  const frac = userSelectedIdx !== null ? 0 : (rawIdx - scrollComputedIdx);
 
   const currentComm = communities[activeIdx] || communities[0];
 
@@ -99,7 +102,7 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
         <div
           style={{
             display: 'flex',
-            gap: '1.5rem',
+            gap: '1.25rem',
             marginBottom: '2.5rem',
             borderBottom: '1px solid rgba(255,255,255,0.08)',
             paddingBottom: '1.2rem',
@@ -109,9 +112,13 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
           {communities.map((c, i) => {
             const isSelected = i === activeIdx;
             return (
-              <div
+              <button
                 key={c.id}
+                onClick={() => setUserSelectedIdx(i)}
                 style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
@@ -121,12 +128,14 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
                   color: isSelected ? 'var(--gold-light)' : 'rgba(255,255,255,0.35)',
                   transition: 'all 0.3s ease',
                   whiteSpace: 'nowrap',
+                  padding: '0.2rem 0',
                 }}
               >
                 <span
                   style={{
                     fontSize: '0.75rem',
                     color: isSelected ? 'var(--gold-primary)' : 'rgba(255,255,255,0.2)',
+                    fontWeight: 600,
                   }}
                 >
                   0{i + 1}
@@ -139,10 +148,11 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
                       height: '6px',
                       borderRadius: '50%',
                       backgroundColor: 'var(--gold-primary)',
+                      boxShadow: '0 0 8px var(--gold-primary)',
                     }}
                   />
                 )}
-              </div>
+              </button>
             );
           })}
         </div>

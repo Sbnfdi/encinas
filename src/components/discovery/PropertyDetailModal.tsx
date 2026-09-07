@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import type { Property } from '../../types';
+import type { Property, Currency } from '../../types';
+import { formatPriceInCurrency } from '../../types';
 import { ChevronRight, DollarSign, Layers, MapPin, Sparkles, X } from 'lucide-react';
 
 interface PropertyDetailModalProps {
   property: Property | null;
+  currency?: Currency;
   onClose: () => void;
   onInquire: (property: Property) => void;
 }
 
 export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
   property,
+  currency = 'AED',
   onClose,
   onInquire,
 }) => {
-  if (!property) return null;
-
   const [activeTab, setActiveTab] = useState<'narrative' | 'architecture' | 'amenities' | 'payment' | 'gallery'>('narrative');
+
+  if (!property) return null;
 
   return (
     <div
@@ -195,10 +198,10 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
               }}
             >
               <div style={{ fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
-                Direct Allocation Price
+                Direct Allocation Price ({currency})
               </div>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--gold-pale)', fontWeight: 700 }}>
-                {property.startingPriceText}
+                {formatPriceInCurrency(property.priceAED, currency)}
               </div>
               <div style={{ fontSize: '0.72rem', color: '#4ADE80', marginTop: '0.2rem' }}>
                 Status: {property.status}

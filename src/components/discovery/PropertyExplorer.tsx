@@ -1,20 +1,31 @@
 import { useState, useMemo } from 'react';
 import type { FC } from 'react';
-import type { Property, FilterState, Community, Developer } from '../../types';
+import type { Property, FilterState, Community, Developer, Currency } from '../../types';
+import { formatPriceInCurrency } from '../../types';
 import { Bed, ChevronRight, Eye, Layers, MapPin, RotateCcw, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
 
 interface PropertyExplorerProps {
   properties: Property[];
   communities: Community[];
   developers: Developer[];
+  currency?: Currency;
   onSelectProperty: (property: Property) => void;
   onInquireProperty: (property: Property) => void;
 }
+
+const CATEGORY_PILLS = [
+  { id: 'ALL', label: 'All Allocations' },
+  { id: 'Waterfront Villa', label: 'Waterfront Villas' },
+  { id: 'Sky Penthouse', label: 'Sky Penthouses' },
+  { id: 'Branded Residence', label: 'Branded Residences' },
+  { id: 'Private Island Mansion', label: 'Island Mansions' },
+];
 
 export const PropertyExplorer: FC<PropertyExplorerProps> = ({
   properties,
   communities,
   developers,
+  currency = 'AED',
   onSelectProperty,
   onInquireProperty,
 }) => {
@@ -68,8 +79,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
       style={{
         position: 'relative',
         zIndex: 20,
-        backgroundColor: '#0A0A0A',
-        borderTop: '1px solid rgba(197, 168, 128, 0.18)',
+        backgroundColor: '#070707',
+        borderTop: '1px solid var(--border-gold)',
         padding: '6rem 4vw',
       }}
     >
@@ -80,7 +91,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             display: 'flex',
             flexDirection: 'column',
             gap: '0.8rem',
-            marginBottom: '3rem',
+            marginBottom: '2.5rem',
           }}
         >
           <div
@@ -95,7 +106,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             }}
           >
             <Sparkles size={13} />
-            <span>PRACTICAL SEARCH TRANSITION • ULTRA-LUXURY INVENTORY</span>
+            <span>CURATED REPERTORY • ULTRA-LUXURY INVENTORY</span>
           </div>
 
           <div
@@ -117,10 +128,10 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   color: '#FFF',
                 }}
               >
-                PROPERTY DISCOVERY REPERTORY
+                PROPERTY REPERTORY
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.4rem', maxWidth: '640px' }}>
-                Filter across verified off-plan allocations, private island palaces, and high-floor penthouses with direct developer terms.
+                Filter verified off-plan allocations, private island palaces, and sky penthouses with direct developer boardroom terms.
               </p>
             </div>
 
@@ -128,7 +139,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               <button
                 onClick={() => setShowFilterBar(!showFilterBar)}
                 className="btn-secondary"
-                style={{ padding: '0.65rem 1.25rem', fontSize: '0.75rem' }}
+                style={{ padding: '0.65rem 1.25rem', fontSize: '0.74rem' }}
               >
                 <SlidersHorizontal size={14} />
                 <span>{showFilterBar ? 'HIDE FILTERS' : 'ADVANCED FILTERS'}</span>
@@ -137,13 +148,49 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               <button
                 onClick={resetFilters}
                 className="btn-secondary"
-                style={{ padding: '0.65rem 1rem', fontSize: '0.75rem' }}
+                style={{ padding: '0.65rem 1rem', fontSize: '0.74rem' }}
                 title="Reset all filters"
               >
                 <RotateCcw size={14} />
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Quick Category Filter Chips */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.6rem',
+            overflowX: 'auto',
+            paddingBottom: '1rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          {CATEGORY_PILLS.map((pill) => {
+            const isSelected = filters.type === pill.id;
+            return (
+              <button
+                key={pill.id}
+                onClick={() => setFilters({ ...filters, type: pill.id })}
+                style={{
+                  padding: '0.5rem 1.1rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.74rem',
+                  letterSpacing: '0.08em',
+                  fontWeight: 600,
+                  border: isSelected ? '1px solid var(--gold-primary)' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: isSelected ? 'rgba(197, 168, 128, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+                  color: isSelected ? 'var(--gold-light)' : 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {pill.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Filter Bar */}
@@ -153,7 +200,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             padding: '1.5rem',
             borderRadius: '4px',
             marginBottom: '2.5rem',
-            border: '1px solid rgba(255,255,255,0.08)',
+            border: '1px solid var(--border-gold)',
           }}
         >
           {/* Main Search Row */}
@@ -173,6 +220,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   color: '#FFF',
                   fontSize: '0.88rem',
                   outline: 'none',
+                  boxSizing: 'border-box',
                 }}
               />
               <Search size={15} color="var(--gold-primary)" style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -191,6 +239,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   color: '#FFF',
                   fontSize: '0.84rem',
                   outline: 'none',
+                  boxSizing: 'border-box',
                 }}
               >
                 <option value="ALL">All Communities</option>
@@ -213,6 +262,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   color: '#FFF',
                   fontSize: '0.84rem',
                   outline: 'none',
+                  boxSizing: 'border-box',
                 }}
               >
                 <option value="ALL">All Developers</option>
@@ -250,6 +300,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     color: '#FFF',
                     fontSize: '0.84rem',
                     outline: 'none',
+                    boxSizing: 'border-box',
                   }}
                 >
                   <option value="ALL">All Types</option>
@@ -276,6 +327,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     color: '#FFF',
                     fontSize: '0.84rem',
                     outline: 'none',
+                    boxSizing: 'border-box',
                   }}
                 >
                   <option value="ALL">All Statuses</option>
@@ -302,6 +354,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     color: '#FFF',
                     fontSize: '0.84rem',
                     outline: 'none',
+                    boxSizing: 'border-box',
                   }}
                 >
                   <option value="100000000">Any Price Cap</option>
@@ -316,8 +369,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         </div>
 
         {/* Results Counter */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <span style={{ fontSize: '0.8rem', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem' }}>
+          <span style={{ fontSize: '0.82rem', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
             Showing <strong style={{ color: 'var(--gold-light)' }}>{filteredProperties.length}</strong> ultra-luxury assets
           </span>
           <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
@@ -329,8 +382,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-            gap: '2rem',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+            gap: '2.25rem',
           }}
         >
           {filteredProperties.map((prop) => (
@@ -340,10 +393,10 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               style={{
                 borderRadius: '4px',
                 overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid var(--border-gold)',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'all 0.35s ease',
+                transition: 'transform 0.35s ease, box-shadow 0.35s ease',
               }}
             >
               {/* Card Image */}
@@ -477,10 +530,10 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.25rem' }}>
                   <div>
                     <div style={{ fontSize: '0.62rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
-                      Starting Price
+                      Starting Price ({currency})
                     </div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', color: 'var(--gold-pale)', fontWeight: 600 }}>
-                      {prop.startingPriceText}
+                      {formatPriceInCurrency(prop.priceAED, currency)}
                     </div>
                   </div>
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Developer } from '../../types';
 import type { FC } from 'react';
 import { Award, ChevronRight, Crown } from 'lucide-react';
@@ -13,10 +14,12 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
   progress,
   onSelectDeveloper,
 }) => {
+  const [userSelectedIdx, setUserSelectedIdx] = useState<number | null>(null);
   const count = developers.length;
   const rawIdx = progress * (count - 1);
-  const activeIdx = Math.min(count - 1, Math.max(0, Math.floor(rawIdx)));
-  const frac = rawIdx - activeIdx;
+  const scrollComputedIdx = Math.min(count - 1, Math.max(0, Math.floor(rawIdx)));
+  const activeIdx = userSelectedIdx !== null ? userSelectedIdx : scrollComputedIdx;
+  const frac = userSelectedIdx !== null ? 0 : (rawIdx - scrollComputedIdx);
 
   const currentDev = developers[activeIdx] || developers[0];
 
@@ -87,15 +90,16 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
             return (
               <button
                 key={dev.id}
-                onClick={() => onSelectDeveloper(dev)}
+                onClick={() => setUserSelectedIdx(idx)}
                 style={{
-                  background: isActive ? 'rgba(197, 168, 128, 0.08)' : 'transparent',
+                  background: isActive ? 'rgba(197, 168, 128, 0.12)' : 'rgba(255, 255, 255, 0.02)',
                   border: isActive ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '2px',
                   padding: '0.85rem 1rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
+                  boxShadow: isActive ? '0 0 16px rgba(197, 168, 128, 0.15)' : 'none',
                 }}
               >
                 <div style={{ fontSize: '0.65rem', color: isActive ? 'var(--gold-primary)' : 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-serif)' }}>
@@ -106,7 +110,7 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
                     fontFamily: 'var(--font-sans)',
                     fontWeight: 600,
                     fontSize: '0.85rem',
-                    color: isActive ? 'var(--gold-light)' : 'rgba(255,255,255,0.5)',
+                    color: isActive ? 'var(--gold-light)' : 'rgba(255,255,255,0.6)',
                     marginTop: '0.2rem',
                     letterSpacing: '0.05em',
                   }}

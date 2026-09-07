@@ -201,6 +201,22 @@ html, body {
   50% { height: 18px; }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes goldShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, rgba(197, 168, 128, 0.4) 0%, rgba(243, 234, 219, 0.9) 50%, rgba(197, 168, 128, 0.4) 100%);
+  background-size: 200% 100%;
+  animation: goldShimmer 3s infinite linear;
+}
+
 .wave-bar {
   display: inline-block;
   width: 2px;
@@ -214,6 +230,12 @@ html, body {
 .wave-bar:nth-child(3) { animation-delay: 0.5s; }
 .wave-bar:nth-child(4) { animation-delay: 0.2s; }
 .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+/* Focus styles */
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold-light) !important;
+  box-shadow: 0 0 10px rgba(197, 168, 128, 0.25);
+}
 
 /* Reduced Motion preferences */
 @media (prefers-reduced-motion: reduce) {

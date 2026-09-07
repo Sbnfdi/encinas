@@ -4,7 +4,8 @@ import type {
   Property,
   Community,
   Developer,
-  ConsultationInquiry
+  ConsultationInquiry,
+  Currency
 } from './types';
 import {
   INITIAL_TIMELINE_SCENES,
@@ -25,7 +26,8 @@ import { ConsultationScene } from './components/cinematic/ConsultationScene';
 import { PropertyExplorer } from './components/discovery/PropertyExplorer';
 import { PropertyDetailModal } from './components/discovery/PropertyDetailModal';
 import { AdminPortal } from './components/admin/AdminPortal';
-import { ArrowDown, Compass, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AdminLoginModal } from './components/admin/AdminLoginModal';
+import { ArrowDown, Compass, Settings, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 
 export function App() {
   // PERSISTED CMS STATE
@@ -47,15 +49,22 @@ export function App() {
     return saved ? JSON.parse(saved) : INITIAL_INQUIRIES;
   });
 
-  // ACTIVE MODALS & ADMIN
+  // ACTIVE MODALS & AUTH
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return (
+      sessionStorage.getItem('encinas_admin_auth') === 'true' ||
+      localStorage.getItem('encinas_admin_auth') === 'true'
+    );
+  });
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState<boolean>(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
+  const [currency, setCurrency] = useState<Currency>('AED');
 
   // SCROLL TIMELINE DRIVER
   const [globalProgress, setGlobalProgress] = useState<number>(0);
   const [currentSceneIndex, setCurrentSceneIndex] = useState<number>(0);
-  const [isHeroSection, setIsHeroSection] = useState<boolean>(true);
 
   // Specific progress for the pinned Property Reel section
   const propertyReelTrackRef = useRef<HTMLDivElement>(null);
@@ -68,79 +77,68 @@ export function App() {
 
   // Global scroll listener & Intersection Observer for timeline scenes
   useEffect(() => {
-  const sceneIds = [
-    'scene-hero',
-    'scene-properties',
-    'scene-communities',
-    'scene-developers',
-    'scene-investment',
-    'scene-philosophy',
-    'scene-consultation',
-    'property-discovery',
-  ];
+    const sceneIds = [
+      'scene-hero',
+      'scene-properties',
+      'scene-communities',
+      'scene-developers',
+      'scene-investment',
+      'scene-philosophy',
+      'scene-consultation',
+      'property-discovery',
+    ];
 
-  // Scroll handler for global progress and property reel progress
-  const handleScroll = () => {
-    const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (totalDocHeight > 0) {
-      const progress = Math.min(1, Math.max(0, window.scrollY / totalDocHeight));
-      setGlobalProgress(progress);
-    }
-
-    // Check if scrolled down past the hero section
-    const heroEl = document.getElementById('scene-hero');
-    if (heroEl) {
-      const rect = heroEl.getBoundingClientRect();
-      setIsHeroSection(rect.bottom > window.innerHeight * 0.35 && window.scrollY < window.innerHeight * 0.7);
-    } else {
-      setIsHeroSection(window.scrollY < 250);
-    }
-
-    // Track Property Reel internal horizontal progress
-    const reelTrack = propertyReelTrackRef.current;
-    if (reelTrack) {
-      const rect = reelTrack.getBoundingClientRect();
-      const trackScrollable = rect.height - window.innerHeight;
-      if (trackScrollable > 0) {
-        const scrolledInTrack = -rect.top;
-        const p = Math.min(1, Math.max(0, scrolledInTrack / trackScrollable));
-        setPropertyReelProgress(p);
+    const handleScroll = () => {
+      const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalDocHeight > 0) {
+        const progress = Math.min(1, Math.max(0, window.scrollY / totalDocHeight));
+        setGlobalProgress(progress);
       }
-    }
-  };
 
-  // IntersectionObserver for determining the active scene
-  const sceneElements = sceneIds
-    .map((id) => document.getElementById(id))
-    .filter(Boolean) as HTMLElement[];
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const idx = sceneIds.indexOf(entry.target.id);
-          if (idx !== -1) {
-            setCurrentSceneIndex(Math.min(activeScenes.length - 1, idx));
-          }
+      // Track Property Reel internal horizontal progress
+      const reelTrack = propertyReelTrackRef.current;
+      if (reelTrack) {
+        const rect = reelTrack.getBoundingClientRect();
+        const trackScrollable = rect.height - window.innerHeight;
+        if (trackScrollable > 0) {
+          const scrolledInTrack = -rect.top;
+          const p = Math.min(1, Math.max(0, scrolledInTrack / trackScrollable));
+          setPropertyReelProgress(p);
         }
-      });
-    },
-    {
-      root: null,
-      threshold: 0.35,
-    }
-  );
+      }
+    };
 
-  sceneElements.forEach((el) => observer.observe(el));
+    // IntersectionObserver for determining active scene
+    const sceneElements = sceneIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  // Initialise on mount
-  handleScroll();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = sceneIds.indexOf(entry.target.id);
+            if (idx !== -1) {
+              setCurrentSceneIndex(Math.min(activeScenes.length - 1, idx));
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        threshold: 0.35,
+      }
+    );
 
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
-    observer.disconnect();
-  };
-}, [activeScenes.length]);
+    sceneElements.forEach((el) => observer.observe(el));
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
+  }, [activeScenes.length]);
 
   // Persist state updates
   const handleUpdateScenes = (updated: TimelineScene[]) => {
@@ -200,10 +198,46 @@ export function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleOpenAdmin = () => {
+    if (isAuthenticated) {
+      setIsAdminOpen(true);
+    } else {
+      setIsAdminLoginOpen(true);
+    }
+  };
+
+  const handleLogoutAdmin = () => {
+    sessionStorage.removeItem('encinas_admin_auth');
+    localStorage.removeItem('encinas_admin_auth');
+    setIsAuthenticated(false);
+    setIsAdminOpen(false);
+  };
+
+  // Dynamic Scene lookup for customized timelines
+  const heroScene = activeScenes.find((s) => s.sceneType === 'HERO') || activeScenes[0];
+  const investmentScene = activeScenes.find((s) => s.sceneType === 'INVESTMENT') || activeScenes[5];
+  const philosophyScene = activeScenes.find((s) => s.sceneType === 'BRAND') || activeScenes[6];
+  const consultationScene = activeScenes.find((s) => s.sceneType === 'CTA') || activeScenes[7];
+
   const currentScene = activeScenes[currentSceneIndex] || activeScenes[0];
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: '#070707' }}>
+      {/* Viewport Top 2px Shimmering Journey Progress Bar */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: `${Math.min(100, Math.max(0, globalProgress * 100))}%`,
+          height: '2.5px',
+          background: 'linear-gradient(90deg, #8E7051 0%, #DFC29B 50%, #FFF 100%)',
+          zIndex: 150,
+          transition: 'width 0.1s linear',
+          boxShadow: '0 0 10px rgba(197, 168, 128, 0.7)',
+        }}
+      />
+
       {/* 3D Real-time Architectural Camera Canvas */}
       <ThreeCanvas scrollProgress={globalProgress} reducedMotion={reducedMotion} />
 
@@ -218,7 +252,7 @@ export function App() {
           left: 0,
           right: 0,
           zIndex: 60,
-          padding: 'clamp(0.6rem, 1.8vw, 1rem) clamp(0.75rem, 2.5vw, 2.5rem)',
+          padding: 'clamp(0.6rem, 1.8vw, 0.95rem) clamp(0.75rem, 2.5vw, 2.5rem)',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.45rem',
@@ -243,7 +277,7 @@ export function App() {
                 gap: '0.45rem',
               }}
             >
-              <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)' }}>⚜️</span>
+              <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.25rem)' }}>⚜️</span>
               <span
                 style={{
                   fontFamily: 'var(--font-serif)',
@@ -290,14 +324,49 @@ export function App() {
             <span style={{ fontWeight: 600 }}>{currentScene.title}</span>
           </div>
 
-          {/* Right Actions: Sound Atmosphere + Admin Toggle + CTA */}
-          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.5vw, 0.75rem)' }}>
+          {/* Right Actions: Currency Selector + Sound + CMS Access + CTA */}
+          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.2vw, 0.75rem)' }}>
+            {/* Multi-Currency Toggle */}
+            <div
+              className="glass-pill hidden sm:inline-flex"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px',
+                borderRadius: '9999px',
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(12, 12, 12, 0.7)',
+              }}
+              title="Select display currency"
+            >
+              {(['AED', 'USD', 'EUR', 'GBP'] as Currency[]).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCurrency(c)}
+                  style={{
+                    background: currency === c ? 'rgba(197, 168, 128, 0.25)' : 'transparent',
+                    border: 'none',
+                    color: currency === c ? 'var(--gold-light)' : 'var(--text-dim)',
+                    borderRadius: '9999px',
+                    padding: '0.22rem 0.55rem',
+                    fontSize: '0.66rem',
+                    letterSpacing: '0.08em',
+                    fontWeight: currency === c ? 700 : 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+
             {/* Audio Ambience Synthesizer */}
             <AudioAmbience />
 
-            {/* Admin CMS Switcher */}
+            {/* Admin CMS Access (Protected by Login Gateway) */}
             <button
-              onClick={() => setIsAdminOpen(true)}
+              onClick={handleOpenAdmin}
               className="glass-pill"
               style={{
                 display: 'inline-flex',
@@ -307,13 +376,13 @@ export function App() {
                 borderRadius: '9999px',
                 fontSize: '0.72rem',
                 letterSpacing: '0.12em',
-                color: 'var(--text-secondary)',
+                color: isAuthenticated ? 'var(--gold-light)' : 'var(--text-secondary)',
                 cursor: 'pointer',
-                border: '1px solid rgba(255,255,255,0.1)',
+                border: isAuthenticated ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.1)',
               }}
-              title="Open Operational Admin CMS & Story Builder"
+              title={isAuthenticated ? 'Open CMS Builder (Authenticated)' : 'Sign In to Operational CMS'}
             >
-              <Settings size={13} color="var(--gold-primary)" />
+              {isAuthenticated ? <Settings size={13} color="var(--gold-primary)" /> : <Lock size={12} color="var(--gold-primary)" />}
               <span className="hidden sm:inline">CMS BUILDER</span>
             </button>
 
@@ -329,7 +398,7 @@ export function App() {
           </div>
         </div>
 
-        {/* Dedicated Scene Tracker (Mobile: prominent, touch-interactive with quick stepping) */}
+        {/* Dedicated Scene Tracker (Mobile: touch-interactive with stepping) */}
         <div className="flex md:hidden justify-center items-center w-full pointer-events-auto">
           <div
             onClick={() => jumpToScene(currentSceneIndex)}
@@ -414,22 +483,22 @@ export function App() {
         </div>
       </header>
 
-      {/* Timeline Indicator Rail (Left Fixed Rail - visible only in hero section to avoid overlapping content) */}
+      {/* Persistent Elegant Timeline Indicator Rail (Desktop left fixed rail) */}
       <TimelineIndicator
         scenes={activeScenes}
         currentSceneIndex={currentSceneIndex}
         globalProgress={globalProgress}
         onSelectScene={jumpToScene}
-        visible={isHeroSection && currentSceneIndex === 0}
+        visible={true}
       />
 
       {/* ================================================================ */}
       {/* 01 — HERO SCENE: THE HORIZON (DUBAI SKYLINE EMERGENCE)           */}
       {/* ================================================================ */}
       <section id="scene-hero" style={{ position: 'relative', zIndex: 10 }}>
-        {activeScenes[0] && (
+        {heroScene && (
           <HeroTimelineScene
-            scene={activeScenes[0]}
+            scene={heroScene}
             progress={Math.min(1, globalProgress * 6)}
             onExploreClick={() => jumpToScene(1)}
           />
@@ -445,7 +514,7 @@ export function App() {
         ref={propertyReelTrackRef}
         style={{
           position: 'relative',
-          height: '240vh', // Pinned scroll track for horizontal reel travel
+          height: '240vh',
           zIndex: 15,
         }}
       >
@@ -530,9 +599,9 @@ export function App() {
           padding: '6rem 0',
         }}
       >
-        {activeScenes[5] && (
+        {investmentScene && (
           <InvestmentBrandScene
-            scene={activeScenes[5]}
+            scene={investmentScene}
             progress={globalProgress}
             onOpenConsultation={() => scrollToConsultation()}
           />
@@ -554,9 +623,9 @@ export function App() {
           padding: '6rem 0',
         }}
       >
-        {activeScenes[6] && (
+        {philosophyScene && (
           <InvestmentBrandScene
-            scene={activeScenes[6]}
+            scene={philosophyScene}
             progress={globalProgress}
             onOpenConsultation={() => scrollToConsultation()}
           />
@@ -577,31 +646,36 @@ export function App() {
           zIndex: 15,
         }}
       >
-        {activeScenes[7] && (
+        {consultationScene && (
           <ConsultationScene
-            scene={activeScenes[7]}
+            scene={consultationScene}
             onSubmitInquiry={handleAddInquiry}
           />
         )}
       </section>
 
-      {/* Transition Prompt to Practical Discovery */}
+      {/* Refined Seamless Transition Divider */}
       <div
         style={{
           position: 'relative',
           zIndex: 25,
           textAlign: 'center',
-          padding: '4rem 1rem 3rem 1rem',
-          background: 'linear-gradient(to bottom, transparent, #0A0A0A)',
+          padding: '5rem 1rem 3rem 1rem',
+          background: 'linear-gradient(to bottom, transparent, #070707)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1.25rem',
         }}
       >
+        <div style={{ width: '48px', height: '1px', background: 'var(--gold-primary)', opacity: 0.6 }} />
         <button
           onClick={scrollToDiscovery}
           className="btn-secondary"
-          style={{ padding: '0.9rem 2.2rem' }}
+          style={{ padding: '0.8rem 2rem', fontSize: '0.75rem' }}
         >
-          <Compass size={16} />
-          <span>TRANSITION TO PROPERTY DISCOVERY EXPLORER</span>
+          <Compass size={15} color="var(--gold-primary)" />
+          <span>EXPLORE COMPLETE PORTFOLIO REPERTORY</span>
           <ArrowDown size={14} />
         </button>
       </div>
@@ -613,6 +687,7 @@ export function App() {
         properties={properties}
         communities={communities}
         developers={developers}
+        currency={currency}
         onSelectProperty={(prop) => setSelectedProperty(prop)}
         onInquireProperty={(_prop) => {
           setSelectedProperty(null);
@@ -620,7 +695,7 @@ export function App() {
         }}
       />
 
-      {/* Luxury Footer */}
+      {/* Luxury Sovereign Footer */}
       <footer
         style={{
           position: 'relative',
@@ -724,8 +799,12 @@ export function App() {
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             <span>Privacy Protocol</span>
             <span>Terms of Mandate</span>
-            <span style={{ color: 'var(--gold-primary)', cursor: 'pointer' }} onClick={() => setIsAdminOpen(true)}>
-              CMS Admin
+            <span
+              style={{ color: 'var(--gold-primary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+              onClick={handleOpenAdmin}
+            >
+              <Lock size={11} />
+              <span>CMS Portal</span>
             </span>
           </div>
         </div>
@@ -736,6 +815,7 @@ export function App() {
       {/* ================================================================ */}
       <PropertyDetailModal
         property={selectedProperty}
+        currency={currency}
         onClose={() => setSelectedProperty(null)}
         onInquire={(_p) => {
           setSelectedProperty(null);
@@ -757,13 +837,28 @@ export function App() {
           onUpdateProperties={handleUpdateProperties}
           onUpdateInquiries={handleUpdateInquiries}
           onCloseAdmin={() => setIsAdminOpen(false)}
+          onLogout={handleLogoutAdmin}
           onPreviewScene={(sceneIdx) => {
             setIsAdminOpen(false);
             setTimeout(() => jumpToScene(sceneIdx), 150);
           }}
         />
       )}
+
+      {/* ================================================================ */}
+      {/* SECURE CMS LOGIN GATEWAY MODAL                                   */}
+      {/* ================================================================ */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onClose={() => setIsAdminLoginOpen(false)}
+        onSuccessLogin={() => {
+          setIsAuthenticated(true);
+          setIsAdminLoginOpen(false);
+          setIsAdminOpen(true);
+        }}
+      />
     </div>
   );
 }
+
 export default App;

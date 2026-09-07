@@ -10,7 +10,10 @@ interface ThreeCanvasProps {
 export const ThreeCanvas: FC<ThreeCanvasProps> = ({ scrollProgress, reducedMotion = false }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(scrollProgress);
-  progressRef.current = scrollProgress;
+
+  useEffect(() => {
+    progressRef.current = scrollProgress;
+  }, [scrollProgress]);
 
   useEffect(() => {
     const container = mountRef.current;
