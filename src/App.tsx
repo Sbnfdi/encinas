@@ -285,6 +285,7 @@ export function App() {
         currentSceneIndex={currentSceneIndex}
         globalProgress={globalProgress}
         onSelectScene={jumpToScene}
+        visible={!selectedProperty && !isAdminOpen && !isAdminLoginOpen && !isMobileMenuOpen}
       />
 
       {/* Top Floating Luxury Navigation Header */}
@@ -476,7 +477,7 @@ export function App() {
           <button
             onClick={scrollToConsultation}
             aria-label="Request confidential advisory consultation"
-            className="btn-gold"
+            className="btn-gold sm:inline-flex hidden"
             style={{
               padding: '0.48rem clamp(0.65rem, 1.4vw, 1.15rem)',
               fontSize: '0.72rem',
@@ -647,28 +648,16 @@ export function App() {
       {/* 02 — PINNED HORIZONTAL PROPERTY REEL                             */}
       {/* Vertical scroll drives horizontal property showcase              */}
       {/* ================================================================ */}
+      {/* ================================================================ */}
+      {/* 02 — PINNED HORIZONTAL PROPERTY REEL                             */}
+      {/* Vertical scroll drives horizontal property showcase              */}
+      {/* ================================================================ */}
       <section
         id="scene-properties"
         ref={propertyReelTrackRef}
-        style={{
-          position: 'relative',
-          height: '135vh',
-          zIndex: 15,
-        }}
+        className="property-reel-track"
       >
-        <div
-          style={{
-            position: 'sticky',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
+        <div className="property-reel-stage">
           <PropertyReelScene
             properties={properties}
             progress={propertyReelProgress}
@@ -684,15 +673,8 @@ export function App() {
       {/* ================================================================ */}
       <section
         id="scene-communities"
-        style={{
-          position: 'relative',
-          minHeight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 15,
-          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
-        }}
+        className="responsive-scene-section"
+        style={{ zIndex: 15 }}
       >
         <CommunityTimelineScene
           communities={communities}
@@ -706,15 +688,8 @@ export function App() {
       {/* ================================================================ */}
       <section
         id="scene-developers"
-        style={{
-          position: 'relative',
-          minHeight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 15,
-          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
-        }}
+        className="responsive-scene-section"
+        style={{ zIndex: 15 }}
       >
         <DeveloperTimelineScene
           developers={developers}
@@ -728,15 +703,8 @@ export function App() {
       {/* ================================================================ */}
       <section
         id="scene-investment"
-        style={{
-          position: 'relative',
-          minHeight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 15,
-          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
-        }}
+        className="responsive-scene-section"
+        style={{ zIndex: 15 }}
       >
         {investmentScene && (
           <InvestmentBrandScene
@@ -752,15 +720,8 @@ export function App() {
       {/* ================================================================ */}
       <section
         id="scene-philosophy"
-        style={{
-          position: 'relative',
-          minHeight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 15,
-          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
-        }}
+        className="responsive-scene-section"
+        style={{ zIndex: 15 }}
       >
         {philosophyScene && (
           <InvestmentBrandScene
@@ -776,15 +737,8 @@ export function App() {
       {/* ================================================================ */}
       <section
         id="scene-consultation"
-        style={{
-          position: 'relative',
-          minHeight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 15,
-          padding: 'clamp(3rem, 6vh, 4.5rem) 0',
-        }}
+        className="responsive-scene-section"
+        style={{ zIndex: 15 }}
       >
         {consultationScene && (
           <ConsultationScene

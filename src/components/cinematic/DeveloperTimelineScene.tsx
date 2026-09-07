@@ -28,12 +28,11 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        height: '100%',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 4vw',
-        overflow: 'hidden',
+        padding: '0 clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       <div
@@ -80,11 +79,11 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
           aria-label="Master Architects and Developers"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '1rem',
-            marginBottom: '3rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
+            gap: '0.75rem',
+            marginBottom: '2rem',
             borderBottom: '1px solid rgba(255,255,255,0.08)',
-            paddingBottom: '1.5rem',
+            paddingBottom: '1.25rem',
           }}
         >
           {developers.map((dev, idx) => {
@@ -101,7 +100,7 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
                   background: isActive ? 'rgba(197, 168, 128, 0.12)' : 'rgba(255, 255, 255, 0.02)',
                   border: isActive ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '2px',
-                  padding: '0.85rem 1rem',
+                  padding: '0.75rem 0.85rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
@@ -116,10 +115,10 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
                   style={{
                     fontFamily: 'var(--font-sans)',
                     fontWeight: 600,
-                    fontSize: '0.85rem',
+                    fontSize: '0.82rem',
                     color: isActive ? 'var(--gold-light)' : 'var(--text-secondary)',
-                    marginTop: '0.2rem',
-                    letterSpacing: '0.05em',
+                    marginTop: '0.15rem',
+                    letterSpacing: '0.04em',
                   }}
                 >
                   {dev.name}
@@ -136,8 +135,8 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
           aria-labelledby={`dev-tab-${currentDev.id}`}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-            gap: '3.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.75rem, 3.5vw, 3.5rem)',
             alignItems: 'center',
           }}
         >

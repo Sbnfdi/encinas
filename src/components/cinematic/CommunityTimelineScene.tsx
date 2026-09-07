@@ -29,12 +29,11 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        height: '100%',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 4vw',
-        overflow: 'hidden',
+        padding: '0 clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       {/* Background Transforming Environment Backdrop */}
@@ -102,13 +101,15 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
         <div
           role="tablist"
           aria-label="Dubai Iconic Territories"
+          className="mobile-no-scrollbar"
           style={{
             display: 'flex',
             gap: '1.25rem',
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
             borderBottom: '1px solid rgba(255,255,255,0.08)',
-            paddingBottom: '1.2rem',
+            paddingBottom: '1rem',
             overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           {communities.map((c, i) => {
@@ -171,8 +172,8 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
           aria-labelledby={`community-tab-${currentComm.id}`}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-            gap: '3.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.75rem, 3.5vw, 3.5rem)',
             alignItems: 'center',
           }}
         >
@@ -281,7 +282,7 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
           <div
             className="glass-panel-gold"
             style={{
-              padding: '2.2rem',
+              padding: 'clamp(1.25rem, 3vw, 2.2rem)',
               borderRadius: '4px',
             }}
           >

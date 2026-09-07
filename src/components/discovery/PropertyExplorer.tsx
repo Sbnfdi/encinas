@@ -81,7 +81,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         zIndex: 20,
         backgroundColor: '#070707',
         borderTop: '1px solid var(--border-gold)',
-        padding: 'clamp(3rem, 6vh, 4.5rem) clamp(1rem, 4vw, 3rem)',
+        padding: 'clamp(2.5rem, 5vh, 4rem) clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       <div style={{ maxWidth: '1400px', width: '100%', margin: '0 auto' }}>
@@ -91,7 +91,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             display: 'flex',
             flexDirection: 'column',
             gap: '0.8rem',
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
           }}
         >
           <div
@@ -115,14 +115,14 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               justifyContent: 'space-between',
               alignItems: 'flex-end',
               flexWrap: 'wrap',
-              gap: '1.5rem',
+              gap: '1.25rem',
             }}
           >
             <div>
               <h2
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(2rem, 3.8vw, 3.4rem)',
+                  fontSize: 'clamp(1.8rem, 3.8vw, 3.4rem)',
                   fontWeight: 700,
                   letterSpacing: '0.03em',
                   color: '#FFF',
@@ -130,18 +130,18 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               >
                 PROPERTY REPERTORY
               </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '0.4rem', maxWidth: '640px' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.4rem', maxWidth: '640px' }}>
                 Filter verified off-plan allocations, private island palaces, and sky penthouses with direct developer boardroom terms.
               </p>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               <button
                 onClick={() => setShowFilterBar(!showFilterBar)}
                 aria-expanded={showFilterBar}
                 aria-controls="extended-filter-bar"
                 className="btn-secondary"
-                style={{ padding: '0.65rem 1.25rem', fontSize: '0.74rem' }}
+                style={{ padding: '0.65rem 1.15rem', fontSize: '0.74rem' }}
               >
                 <SlidersHorizontal size={14} aria-hidden="true" />
                 <span>{showFilterBar ? 'HIDE FILTERS' : 'ADVANCED FILTERS'}</span>
@@ -151,7 +151,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                 onClick={resetFilters}
                 aria-label="Reset all property filters"
                 className="btn-secondary"
-                style={{ padding: '0.65rem 1rem', fontSize: '0.74rem' }}
+                style={{ padding: '0.65rem 0.9rem', fontSize: '0.74rem' }}
                 title="Reset all filters"
               >
                 <RotateCcw size={14} aria-hidden="true" />
@@ -164,11 +164,13 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         <div
           role="group"
           aria-label="Filter by property category"
+          className="mobile-no-scrollbar"
           style={{
             display: 'flex',
             gap: '0.6rem',
             overflowX: 'auto',
-            paddingBottom: '1rem',
+            WebkitOverflowScrolling: 'touch',
+            paddingBottom: '0.75rem',
             marginBottom: '1.5rem',
           }}
         >
@@ -423,8 +425,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-            gap: '2.25rem',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.25rem, 3vw, 2.25rem)',
           }}
         >
           {filteredProperties.map((prop) => (
@@ -507,7 +509,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               {/* Card Body */}
               <div
                 style={{
-                  padding: '1.75rem',
+                  padding: 'clamp(1.15rem, 2.5vw, 1.75rem)',
                   display: 'flex',
                   flexDirection: 'column',
                   flex: 1,
@@ -568,7 +570,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                 </div>
 
                 {/* Price & Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.25rem' }}>
                   <div>
                     <div style={{ fontSize: '0.62rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
                       Starting Price ({currency})

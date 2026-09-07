@@ -46,11 +46,11 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: 'auto',
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem clamp(1rem, 4vw, 3rem)',
+        padding: '0 clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       <div
@@ -65,8 +65,8 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '3.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.75rem, 3.5vw, 3.5rem)',
             alignItems: 'center',
           }}
         >
@@ -152,7 +152,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
           <div
             className="glass-panel-gold"
             style={{
-              padding: '2.5rem',
+              padding: 'clamp(1.25rem, 3.5vw, 2.5rem)',
               borderRadius: '4px',
               boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
             }}
@@ -236,7 +236,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '1rem' }}>
                   <div>
                     <label
                       htmlFor="consultation-email"
@@ -302,7 +302,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '1rem' }}>
                   <div>
                     <label
                       htmlFor="consultation-budget"

@@ -20,12 +20,11 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        height: '100%',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 4vw',
-        overflow: 'hidden',
+        padding: '0 clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       <div
@@ -99,14 +98,14 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '3rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+              gap: 'clamp(1rem, 2.5vw, 1.5rem)',
+              marginBottom: '2.5rem',
             }}
           >
             <div
               className="glass-panel-gold"
-              style={{ padding: '1.75rem', borderRadius: '4px' }}
+              style={{ padding: 'clamp(1.25rem, 2.5vw, 1.75rem)', borderRadius: '4px' }}
             >
               <div style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>
                 <ShieldCheck size={28} />
@@ -121,7 +120,7 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
 
             <div
               className="glass-panel"
-              style={{ padding: '1.75rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.08)' }}
+              style={{ padding: 'clamp(1.25rem, 2.5vw, 1.75rem)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <div style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>
                 <KeyRound size={28} />
@@ -136,7 +135,7 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
 
             <div
               className="glass-panel"
-              style={{ padding: '1.75rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.08)' }}
+              style={{ padding: 'clamp(1.25rem, 2.5vw, 1.75rem)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <div style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>
                 <DollarSign size={28} />
@@ -154,14 +153,14 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '3rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+              gap: 'clamp(1rem, 2.5vw, 1.5rem)',
+              marginBottom: '2.5rem',
             }}
           >
             <div
               className="glass-panel-gold"
-              style={{ padding: '1.75rem', borderRadius: '4px' }}
+              style={{ padding: 'clamp(1.25rem, 2.5vw, 1.75rem)', borderRadius: '4px' }}
             >
               <div style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>
                 <Lock size={28} />

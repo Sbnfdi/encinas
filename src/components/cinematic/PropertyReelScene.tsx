@@ -36,12 +36,11 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        height: '100%',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        overflow: 'hidden',
-        padding: '0 5vw',
+        padding: '0 clamp(1rem, 4vw, 3.5rem)',
       }}
     >
       {/* Background ambient glow */}
@@ -69,7 +68,7 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
           gap: '1rem',
           maxWidth: '1300px',
           width: '100%',
-          margin: '0 auto 2.5rem auto',
+          margin: '0 auto 2rem auto',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
           paddingBottom: '1.25rem',
         }}
@@ -90,7 +89,7 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)',
+              fontSize: 'clamp(1.6rem, 3.2vw, 2.6rem)',
               fontWeight: 700,
               letterSpacing: '0.04em',
               color: '#FFF',
@@ -100,7 +99,7 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
           </h2>
         </div>
 
-        {/* Elegant Minimalist Step Indicator */}
+        {/* Elegant Minimalist Step Indicator with generous touch targets */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', color: 'var(--gold-light)' }}>
             0{activeIdx + 1} <span style={{ opacity: 0.35, fontSize: '0.75rem' }}>/ 0{count}</span>
@@ -111,11 +110,12 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                 key={i}
                 onClick={() => setUserSelectedIdx(i)}
                 style={{
-                  width: i === activeIdx ? '32px' : '14px',
-                  height: '8px',
-                  backgroundColor: i === activeIdx ? 'var(--gold-primary)' : 'rgba(255,255,255,0.25)',
-                  borderRadius: '4px',
-                  transition: 'all 0.35s ease',
+                  width: i === activeIdx ? '32px' : '16px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'none',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
@@ -123,7 +123,18 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                 title={`Residence 0${i + 1}`}
                 aria-label={`View Residence 0${i + 1}: ${featured[i]?.title}`}
                 aria-pressed={i === activeIdx}
-              />
+              >
+                <span
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '8px',
+                    backgroundColor: i === activeIdx ? 'var(--gold-primary)' : 'rgba(255,255,255,0.25)',
+                    borderRadius: '4px',
+                    transition: 'all 0.35s ease',
+                  }}
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -141,8 +152,8 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-            gap: 'clamp(2rem, 4.5vw, 4rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.5rem, 3.5vw, 3.5rem)',
             alignItems: 'center',
           }}
         >

@@ -167,7 +167,7 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
         className="xl:hidden"
         style={{
           position: 'fixed',
-          bottom: '1.25rem',
+          bottom: 'max(0.85rem, env(safe-area-inset-bottom, 0.85rem))',
           left: '50%',
           transform: visible ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(40px)',
           opacity: visible ? 1 : 0,

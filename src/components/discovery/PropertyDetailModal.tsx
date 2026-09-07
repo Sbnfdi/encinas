@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import type { Property, Currency } from '../../types';
 import { formatPriceInCurrency } from '../../types';
-import { ChevronRight, DollarSign, Layers, MapPin, Sparkles, X } from 'lucide-react';
+import { ChevronRight, MapPin, Sparkles, X } from 'lucide-react';
 
 interface PropertyDetailModalProps {
   property: Property | null;
@@ -51,22 +51,22 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           position: 'sticky',
           top: 0,
           zIndex: 40,
-          background: 'rgba(8, 8, 8, 0.92)',
+          background: 'rgba(8, 8, 8, 0.95)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(197, 168, 128, 0.25)',
-          padding: '1rem 4vw',
+          padding: '0.85rem clamp(1rem, 4vw, 3rem)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           gap: '1rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', overflow: 'hidden' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-primary)' }}>
               {property.developer} • {property.community}
             </span>
-            <h2 id="property-detail-modal-title" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', color: '#FFF', fontWeight: 600 }}>
+            <h2 id="property-detail-modal-title" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', color: '#FFF', fontWeight: 600, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
               {property.title}
             </h2>
           </div>
@@ -108,14 +108,15 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexShrink: 0 }}>
           <button
             onClick={() => onInquire(property)}
             aria-label={`Reserve allocation for ${property.title}`}
             className="btn-gold"
-            style={{ padding: '0.6rem 1.25rem', fontSize: '0.75rem', minHeight: '40px' }}
+            style={{ padding: '0.55rem clamp(0.75rem, 1.5vw, 1.25rem)', fontSize: '0.74rem', minHeight: '42px' }}
           >
-            <span>RESERVE ALLOCATION</span>
+            <span className="sm:inline hidden">RESERVE ALLOCATION</span>
+            <span className="sm:hidden inline">RESERVE</span>
             <ChevronRight size={14} aria-hidden="true" />
           </button>
 
@@ -133,6 +134,7 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
               cursor: 'pointer',
               color: '#FFF',
               border: '1px solid rgba(255,255,255,0.15)',
+              flexShrink: 0,
             }}
             title="Close modal"
           >
@@ -178,14 +180,14 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           <div
             style={{
               position: 'absolute',
-              bottom: '2.5rem',
-              left: '2.5rem',
-              right: '2.5rem',
+              bottom: 'clamp(1rem, 3vw, 2.5rem)',
+              left: 'clamp(1rem, 3vw, 2.5rem)',
+              right: 'clamp(1rem, 3vw, 2.5rem)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-end',
               flexWrap: 'wrap',
-              gap: '1.5rem',
+              gap: '1.25rem',
             }}
           >
             <div>
@@ -196,7 +198,7 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
               <h1
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(2.2rem, 4.8vw, 3.8rem)',
+                  fontSize: 'clamp(1.8rem, 4.8vw, 3.8rem)',
                   lineHeight: 1.1,
                   fontWeight: 700,
                   color: '#FFF',
@@ -204,7 +206,7 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
               >
                 {property.title}
               </h1>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--gold-light)', marginTop: '0.4rem' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--gold-light)', marginTop: '0.4rem' }}>
                 {property.tagline}
               </p>
             </div>
@@ -212,16 +214,16 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
             <div
               className="glass-panel"
               style={{
-                padding: '1.25rem 2rem',
+                padding: '1rem 1.5rem',
                 borderRadius: '4px',
                 border: '1px solid var(--border-gold)',
-                textAlign: 'right',
+                textAlign: 'left',
               }}
             >
               <div style={{ fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
                 Direct Allocation Price ({currency})
               </div>
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--gold-pale)', fontWeight: 700 }}>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: 'var(--gold-pale)', fontWeight: 700 }}>
                 {formatPriceInCurrency(property.priceAED, currency)}
               </div>
               <div style={{ fontSize: '0.72rem', color: '#4ADE80', marginTop: '0.2rem' }}>
@@ -236,11 +238,11 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           className="glass-panel"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem',
-            padding: '1.5rem 2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))',
+            gap: '1.25rem',
+            padding: '1.25rem clamp(1rem, 2.5vw, 2rem)',
             borderRadius: '4px',
-            marginBottom: '3.5rem',
+            marginBottom: '3rem',
             border: '1px solid rgba(255,255,255,0.08)',
           }}
         >
@@ -285,9 +287,9 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '3rem',
-            marginBottom: '3.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(1.5rem, 3vw, 3rem)',
+            marginBottom: '3rem',
           }}
         >
           {/* Overview */}
@@ -296,7 +298,7 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
               <Sparkles size={13} />
               <span>THE ACQUISITION OVERVIEW</span>
             </div>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: '#FFF', marginBottom: '1rem' }}>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#FFF', marginBottom: '1rem' }}>
               A World-Class Residential Statement
             </h3>
             <p style={{ fontSize: '0.94rem', lineHeight: 1.8, color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
@@ -313,43 +315,43 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
             </div>
           </div>
 
-          {/* Architecture */}
+          {/* Architecture Narrative */}
           <div
             className="glass-panel-gold"
             style={{
-              padding: '2.2rem',
+              padding: 'clamp(1.25rem, 2.5vw, 2rem)',
               borderRadius: '4px',
             }}
           >
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--gold-primary)', fontSize: '0.72rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.8rem' }}>
-              <Layers size={13} />
-              <span>THE ARCHITECTURAL PROSPECTUS</span>
+              <Sparkles size={13} />
+              <span>ARCHITECTURAL PEDIGREE</span>
             </div>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#FFF', marginBottom: '1rem' }}>
-              Materiality & Vanguard Design
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: '#FFF', marginBottom: '1rem' }}>
+              Bespoke Dubai Engineering
             </h3>
-            <p style={{ fontSize: '0.92rem', lineHeight: 1.75, color: 'var(--text-secondary)', marginBottom: '1.75rem' }}>
+            <p style={{ fontSize: '0.92rem', lineHeight: 1.75, color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
               {property.architectureNarrative}
             </p>
 
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.25rem' }}>
-              <span style={{ fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', display: 'block', marginBottom: '0.6rem' }}>
-                Curated Amenities
-              </span>
+              <div style={{ fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
+                Residency Amenities
+              </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {property.amenities.map((am, i) => (
+                {property.amenities.map((amenity, i) => (
                   <span
                     key={i}
                     style={{
-                      fontSize: '0.74rem',
                       padding: '0.35rem 0.75rem',
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(255,255,255,0.1)',
                       borderRadius: '2px',
+                      fontSize: '0.75rem',
                       color: 'var(--gold-light)',
                     }}
                   >
-                    {am}
+                    {amenity}
                   </span>
                 ))}
               </div>
@@ -357,29 +359,21 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           </div>
         </div>
 
-        {/* 04 PAYMENT PLAN BREAKDOWN */}
-        <div
-          className="glass-panel"
-          style={{
-            padding: '2.5rem',
-            borderRadius: '4px',
-            marginBottom: '3.5rem',
-            border: '1px solid rgba(197, 168, 128, 0.25)',
-          }}
-        >
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--gold-primary)', fontSize: '0.72rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-            <DollarSign size={13} />
-            <span>PAYMENT SCHEDULE MILESTONES</span>
+        {/* 04 PAYMENT STRUCTURE */}
+        <div style={{ marginBottom: '3rem' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--gold-primary)', fontSize: '0.72rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.8rem' }}>
+            <Sparkles size={13} />
+            <span>FINANCIAL FRAMEWORK</span>
           </div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: '#FFF', marginBottom: '1.5rem' }}>
-            Flexible Investor Staging
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#FFF', marginBottom: '1.5rem' }}>
+            Payment Milestone Schedule
           </h3>
 
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.5rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+              gap: '1.25rem',
             }}
           >
             <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', borderLeft: '2px solid var(--gold-primary)' }}>
@@ -422,8 +416,8 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '1.5rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+              gap: '1.25rem',
             }}
           >
             {property.gallery.map((imgUrl, i) => (
