@@ -1,12 +1,13 @@
-
-import type { Property } from '../../types';
 import { useState } from 'react';
 import type { FC } from 'react';
-import { ArrowRight, Bed, Eye, Layers, MapPin, Sparkles } from 'lucide-react';
+import type { Property, Currency } from '../../types';
+import { formatPriceInCurrency } from '../../types';
+import { ArrowRight, Bed, Eye, Layers, MapPin } from 'lucide-react';
 
 interface PropertyReelSceneProps {
   properties: Property[];
   progress: number; // 0.0 to 1.0 within Property Reel track
+  currency?: Currency;
   onSelectProperty: (property: Property) => void;
   onInquire: (property: Property) => void;
 }
@@ -14,10 +15,10 @@ interface PropertyReelSceneProps {
 export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
   properties,
   progress,
+  currency = 'AED',
   onSelectProperty,
   onInquire,
 }) => {
-  // Use first 3 featured properties
   const featured = properties.slice(0, 3);
   const count = featured.length;
 
@@ -28,7 +29,6 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
   const activeIdx = userSelectedIdx !== null ? userSelectedIdx : computedIdx;
   const transitionFrac = userSelectedIdx !== null ? 0 : (rawIndex - computedIdx);
 
-  // Active property data
   const currentProp = featured[activeIdx] || featured[0];
 
   return (
@@ -41,72 +41,69 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
         flexDirection: 'column',
         justifyContent: 'center',
         overflow: 'hidden',
-        padding: '0 4vw',
+        padding: '0 5vw',
       }}
     >
-      {/* Background ambient glow according to property */}
+      {/* Background ambient glow */}
       <div
         style={{
           position: 'absolute',
-          top: '20%',
+          top: '25%',
           left: '30%',
           width: '50vw',
           height: '50vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(197, 168, 128, 0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(197, 168, 128, 0.05) 0%, transparent 70%)',
           pointerEvents: 'none',
           filter: 'blur(60px)',
         }}
       />
 
-      {/* Top Section Header Narrative */}
+      {/* Clean Luxury Section Header */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
           flexWrap: 'wrap',
-          gap: '1.25rem',
-          marginBottom: '2rem',
-          maxWidth: '1400px',
+          gap: '1rem',
+          maxWidth: '1300px',
           width: '100%',
-          margin: '0 auto 2rem auto',
+          margin: '0 auto 2.5rem auto',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
-          paddingBottom: '1rem',
+          paddingBottom: '1.25rem',
         }}
       >
         <div>
           <div
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '0.72rem',
-              letterSpacing: '0.22em',
+              fontSize: '0.7rem',
+              letterSpacing: '0.26em',
               textTransform: 'uppercase',
               color: 'var(--gold-primary)',
-              marginBottom: '0.4rem',
+              marginBottom: '0.35rem',
+              fontWeight: 600,
             }}
           >
-            <Sparkles size={12} />
-            <span>02 / 08 • CURATED RESIDENCES REEL</span>
+            FEATURED TROPHY ALLOCATIONS
           </div>
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.6rem, 3.2vw, 2.8rem)',
-              fontWeight: 600,
+              fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)',
+              fontWeight: 700,
               letterSpacing: '0.04em',
+              color: '#FFF',
             }}
           >
-            THE ARCHITECTURAL PORTFOLIO
+            CURATED RESIDENCES
           </h2>
         </div>
 
-        {/* Reel Position Tracker */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', color: 'var(--gold-light)' }}>
-            0{activeIdx + 1} <span style={{ opacity: 0.35, fontSize: '0.8rem' }}>/ 0{count}</span>
+        {/* Elegant Minimalist Step Indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', color: 'var(--gold-light)' }}>
+            0{activeIdx + 1} <span style={{ opacity: 0.35, fontSize: '0.75rem' }}>/ 0{count}</span>
           </div>
           <div style={{ display: 'flex', gap: '6px' }}>
             {featured.map((_, i) => (
@@ -114,26 +111,27 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                 key={i}
                 onClick={() => setUserSelectedIdx(i)}
                 style={{
-                  width: i === activeIdx ? '32px' : '8px',
-                  height: '6px',
+                  width: i === activeIdx ? '28px' : '8px',
+                  height: '4px',
                   backgroundColor: i === activeIdx ? 'var(--gold-primary)' : 'rgba(255,255,255,0.18)',
-                  borderRadius: '3px',
-                  transition: 'all 0.4s ease',
+                  borderRadius: '2px',
+                  transition: 'all 0.35s ease',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
                 }}
-                title={`View Property 0${i + 1}`}
+                title={`Residence 0${i + 1}`}
+                aria-label={`View Residence 0${i + 1}`}
               />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Horizontal Cinematic Stage Inside Vertical Scroll */}
+      {/* Main Stage */}
       <div
         style={{
-          maxWidth: '1400px',
+          maxWidth: '1300px',
           width: '100%',
           margin: '0 auto',
           position: 'relative',
@@ -142,8 +140,8 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-            gap: 'clamp(1.75rem, 4vw, 3.5rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+            gap: 'clamp(2rem, 4.5vw, 4rem)',
             alignItems: 'center',
           }}
         >
@@ -153,27 +151,27 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
               position: 'relative',
               width: '100%',
               aspectRatio: '16/10',
-              borderRadius: '4px',
+              borderRadius: '2px',
               overflow: 'hidden',
               boxShadow: '0 25px 60px rgba(0,0,0,0.85)',
-              border: '1px solid rgba(197, 168, 128, 0.22)',
+              border: '1px solid var(--border-gold)',
             }}
           >
             {featured.map((prop, idx) => {
               const isCurrent = idx === activeIdx;
               const isNext = idx === activeIdx + 1;
               let opacity = 0;
-              let scale = 1.08;
-              let translateX = 30;
+              let scale = 1.06;
+              let translateX = 25;
 
               if (isCurrent) {
                 opacity = 1 - transitionFrac;
-                scale = 1.0 + transitionFrac * 0.08;
-                translateX = -transitionFrac * 40;
+                scale = 1.0 + transitionFrac * 0.06;
+                translateX = -transitionFrac * 30;
               } else if (isNext) {
                 opacity = transitionFrac;
-                scale = 1.08 - transitionFrac * 0.08;
-                translateX = 40 * (1 - transitionFrac);
+                scale = 1.06 - transitionFrac * 0.06;
+                translateX = 30 * (1 - transitionFrac);
               }
 
               return (
@@ -198,7 +196,6 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                       display: 'block',
                     }}
                   />
-                  {/* Subtle glass reflection gradient */}
                   <div
                     style={{
                       position: 'absolute',
@@ -216,17 +213,17 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.45rem',
-                      padding: '0.4rem 0.95rem',
+                      padding: '0.35rem 0.85rem',
                       borderRadius: '9999px',
-                      background: 'rgba(7,7,7,0.8)',
+                      background: 'rgba(7,7,7,0.85)',
                       backdropFilter: 'blur(10px)',
                       border: '1px solid var(--border-gold)',
-                      fontSize: '0.68rem',
-                      letterSpacing: '0.16em',
+                      fontSize: '0.66rem',
+                      letterSpacing: '0.14em',
                       color: 'var(--gold-light)',
                     }}
                   >
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4ADE80' }} />
+                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#4ADE80' }} />
                     <span>{prop.status}</span>
                   </div>
 
@@ -240,11 +237,11 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                       flexDirection: 'column',
                     }}
                   >
-                    <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-dim)' }}>
-                      Starting Investment
+                    <span style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.16em', color: 'var(--text-dim)' }}>
+                      Starting Investment ({currency})
                     </span>
-                    <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--gold-pale)', fontWeight: 600 }}>
-                      {prop.startingPriceText}
+                    <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--gold-pale)', fontWeight: 600 }}>
+                      {formatPriceInCurrency(prop.priceAED, currency)}
                     </span>
                   </div>
                 </div>
@@ -252,21 +249,14 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
             })}
           </div>
 
-          {/* RIGHT: Internal Staged Property Timeline Metadata */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            {/* Developer & Community */}
+          {/* RIGHT: Staged Property Details */}
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.8rem',
-                marginBottom: '0.8rem',
+                gap: '0.75rem',
+                marginBottom: '0.75rem',
               }}
             >
               <span
@@ -287,7 +277,7 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                   alignItems: 'center',
                   gap: '0.35rem',
                   fontSize: '0.72rem',
-                  letterSpacing: '0.14em',
+                  letterSpacing: '0.12em',
                   color: 'var(--text-secondary)',
                 }}
               >
@@ -296,37 +286,34 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
               </span>
             </div>
 
-            {/* Project Title */}
             <h3
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(1.9rem, 3.5vw, 3rem)',
+                fontSize: 'clamp(2rem, 3.4vw, 2.8rem)',
                 lineHeight: 1.15,
                 fontWeight: 700,
-                color: 'var(--text-primary)',
-                marginBottom: '1rem',
+                color: '#FFF',
+                marginBottom: '0.85rem',
               }}
             >
               {currentProp.title}
             </h3>
 
-            {/* Tagline / Subtitle */}
             <p
               style={{
                 fontSize: '1.05rem',
                 fontFamily: 'var(--font-display)',
                 color: 'var(--gold-light)',
-                marginBottom: '1.25rem',
+                marginBottom: '1rem',
                 letterSpacing: '0.04em',
               }}
             >
               {currentProp.tagline}
             </p>
 
-            {/* Description Narrative */}
             <p
               style={{
-                fontSize: '0.9rem',
+                fontSize: '0.88rem',
                 lineHeight: 1.7,
                 color: 'var(--text-secondary)',
                 marginBottom: '1.75rem',
@@ -343,58 +330,57 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '1rem',
-                padding: '1.1rem 1.25rem',
-                borderRadius: '4px',
-                border: '1px solid rgba(255,255,255,0.07)',
+                padding: '1rem 1.25rem',
+                borderRadius: '2px',
+                border: '1px solid rgba(255,255,255,0.08)',
                 marginBottom: '2rem',
               }}
             >
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.64rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                   <Bed size={12} />
                   <span>Residences</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-primary)', marginTop: '0.3rem' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.86rem', color: 'var(--text-primary)', marginTop: '0.25rem' }}>
                   {currentProp.bedrooms}
                 </div>
               </div>
 
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.64rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                   <Layers size={12} />
                   <span>Area</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-primary)', marginTop: '0.3rem' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.86rem', color: 'var(--text-primary)', marginTop: '0.25rem' }}>
                   {currentProp.builtUpAreaSqFt}
                 </div>
               </div>
 
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-                  <Sparkles size={12} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-dim)', fontSize: '0.64rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                   <span>Handover</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.88rem', color: 'var(--gold-light)', marginTop: '0.3rem' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.86rem', color: 'var(--gold-light)', marginTop: '0.25rem' }}>
                   {currentProp.completionDate}
                 </div>
               </div>
             </div>
 
-            {/* Interactive CTAs */}
+            {/* Actions */}
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <button
                 onClick={() => onSelectProperty(currentProp)}
                 className="btn-gold"
-                style={{ flex: 1, minWidth: '180px' }}
+                style={{ flex: 1, minWidth: '170px', padding: '0.8rem 1.4rem' }}
               >
                 <span>EXPLORE ARCHITECTURE</span>
-                <Eye size={15} />
+                <Eye size={14} />
               </button>
 
               <button
                 onClick={() => onInquire(currentProp)}
                 className="btn-secondary"
-                style={{ flex: 1, minWidth: '180px' }}
+                style={{ flex: 1, minWidth: '170px', padding: '0.8rem 1.4rem' }}
               >
                 <span>ALLOCATION BRIEF</span>
                 <ArrowRight size={14} />

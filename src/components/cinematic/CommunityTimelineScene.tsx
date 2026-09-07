@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import type { Community } from '../../types';
 import type { FC } from 'react';
-import { ArrowUpRight, Compass, DollarSign, MapPin, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, DollarSign, MapPin, Sparkles, TrendingUp } from 'lucide-react';
 
 interface CommunityTimelineSceneProps {
   communities: Community[];
@@ -94,8 +94,8 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
             color: 'var(--gold-primary)',
           }}
         >
-          <Compass size={13} />
-          <span>03 / 08 • DUBAI COMMUNITY NARRATIVE</span>
+          <MapPin size={13} />
+          <span>ICONIC TERRITORIES</span>
         </div>
 
         {/* Communities Ribbon Stepper */}
@@ -179,8 +179,8 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
                 textTransform: 'uppercase',
               }}
             >
-              <MapPin size={14} />
-              <span>TERRITORY DISCLOSURE</span>
+              <MapPin size={13} />
+              <span>TERRITORY PROFILE</span>
             </div>
 
             <h2
@@ -287,7 +287,7 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
               }}
             >
               <Sparkles size={13} />
-              <span>THE LIFESTYLE CODES</span>
+              <span>LIFESTYLE PRIVILEGES</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import type { FC } from 'react';
 import type { Property, FilterState, Community, Developer, Currency } from '../../types';
 import { formatPriceInCurrency } from '../../types';
-import { Bed, ChevronRight, Eye, Layers, MapPin, RotateCcw, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { Bed, ChevronRight, Eye, Layers, MapPin, RotateCcw, Search, SlidersHorizontal } from 'lucide-react';
 
 interface PropertyExplorerProps {
   properties: Property[];
@@ -105,8 +105,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               color: 'var(--gold-primary)',
             }}
           >
-            <Sparkles size={13} />
-            <span>CURATED REPERTORY • ULTRA-LUXURY INVENTORY</span>
+            <Layers size={13} />
+            <span>EXCLUSIVE DUBAI INVENTORY</span>
           </div>
 
           <div

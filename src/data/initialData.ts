@@ -15,7 +15,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'cinematic-zoom',
     durationWeight: 1.2,
     isActive: true,
-    metaBadge: '01 / 08 • THE HORIZON',
+    metaBadge: 'PANORAMIC HORIZON',
     stats: [
       { label: 'Prime Yield', value: '7.8% Net' },
       { label: 'Sovereign Tax', value: '0% Tax' },
@@ -37,7 +37,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'horizontal-glide',
     durationWeight: 1.0,
     isActive: true,
-    metaBadge: '02 / 08 • WATERFRONT REEL',
+    metaBadge: 'WATERFRONT REEL',
     stats: [
       { label: 'Starting Price', value: 'AED 3.2M' },
       { label: 'Payment Plan', value: '70 / 30' },
@@ -59,7 +59,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'depth-reveal',
     durationWeight: 1.0,
     isActive: true,
-    metaBadge: '03 / 08 • SKY SANCTUARIES',
+    metaBadge: 'SKY SANCTUARIES',
     stats: [
       { label: 'Starting Price', value: 'AED 1.9M' },
       { label: 'Tower Height', value: '60 Levels' },
@@ -81,7 +81,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'ambient-drift',
     durationWeight: 1.1,
     isActive: true,
-    metaBadge: '04 / 08 • COMMUNITY ARCS',
+    metaBadge: 'ICONIC TERRITORIES',
     stats: [
       { label: 'YoY Capital Growth', value: '+24.6%' },
       { label: 'Avg Price/SqFt', value: 'AED 4,800' },
@@ -102,7 +102,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'cinematic-zoom',
     durationWeight: 1.0,
     isActive: true,
-    metaBadge: '05 / 08 • DEVELOPER REEL',
+    metaBadge: 'MASTER ARCHITECTS',
     stats: [
       { label: 'Direct Access', value: 'Boardroom Tier' },
       { label: 'Pre-Market Entry', value: '48h Headstart' },
@@ -123,7 +123,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'depth-reveal',
     durationWeight: 1.0,
     isActive: true,
-    metaBadge: '06 / 08 • STRATEGY & YIELD',
+    metaBadge: 'CAPITAL STRATEGY',
     stats: [
       { label: 'Rental Yield Avg', value: '6.5% - 9.1%' },
       { label: 'Currency', value: 'USD Pegged' },
@@ -144,7 +144,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'ambient-drift',
     durationWeight: 1.0,
     isActive: true,
-    metaBadge: '07 / 08 • PHILOSOPHY',
+    metaBadge: 'ENCINAS PHILOSOPHY',
     stats: [
       { label: 'Portfolio Managed', value: '$1.4B+' },
       { label: 'Bespoke Advisory', value: 'Strictly VIP' },
@@ -165,7 +165,7 @@ export const INITIAL_TIMELINE_SCENES: TimelineScene[] = [
     animationMode: 'cinematic-zoom',
     durationWeight: 1.3,
     isActive: true,
-    metaBadge: '08 / 08 • CONVERSION DESTINATION',
+    metaBadge: 'CONFIDENTIAL ADVISORY',
     stats: [
       { label: 'Headquarters', value: 'DIFC Gate Tower' },
       { label: 'Private Desk', value: 'Mayfair & Zurich' },

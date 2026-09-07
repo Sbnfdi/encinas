@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FC, FormEvent } from 'react';
 import type { TimelineScene, ConsultationInquiry } from '../../types';
-import { CheckCircle, Lock, Mail, MapPin, Phone, Send, ShieldCheck, Sparkles, User } from 'lucide-react';
+import { CheckCircle, Lock, Mail, MapPin, Phone, Send, ShieldCheck, User } from 'lucide-react';
 
 interface ConsultationSceneProps {
   scene: TimelineScene;
@@ -84,8 +84,8 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                 color: 'var(--gold-primary)',
               }}
             >
-              <Sparkles size={13} />
-              <span>THE FINAL CONVERSION • PRIVATE ADVISORY</span>
+              <ShieldCheck size={14} />
+              <span>CONFIDENTIAL ADVISORY & ACQUISITIONS</span>
             </div>
 
             <h2

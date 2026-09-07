@@ -59,7 +59,7 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
           }}
         >
           <Crown size={14} />
-          <span>04 / 08 • TIER-1 INSTITUTIONAL DEVELOPERS</span>
+          <span>MASTER ARCHITECTS & DEVELOPERS</span>
         </div>
 
         <h2

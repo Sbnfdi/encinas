@@ -16,7 +16,6 @@ import {
 } from './data/initialData';
 import { ThreeCanvas } from './components/cinematic/ThreeCanvas';
 import { AudioAmbience } from './components/cinematic/AudioAmbience';
-import { TimelineIndicator } from './components/cinematic/TimelineIndicator';
 import { HeroTimelineScene } from './components/cinematic/HeroTimelineScene';
 import { PropertyReelScene } from './components/cinematic/PropertyReelScene';
 import { CommunityTimelineScene } from './components/cinematic/CommunityTimelineScene';
@@ -27,7 +26,7 @@ import { PropertyExplorer } from './components/discovery/PropertyExplorer';
 import { PropertyDetailModal } from './components/discovery/PropertyDetailModal';
 import { AdminPortal } from './components/admin/AdminPortal';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
-import { ArrowDown, Compass, Settings, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { Settings, Lock, Compass, ArrowDown } from 'lucide-react';
 
 export function App() {
   // PERSISTED CMS STATE
@@ -219,8 +218,6 @@ export function App() {
   const philosophyScene = activeScenes.find((s) => s.sceneType === 'BRAND') || activeScenes[6];
   const consultationScene = activeScenes.find((s) => s.sceneType === 'CTA') || activeScenes[7];
 
-  const currentScene = activeScenes[currentSceneIndex] || activeScenes[0];
-
   return (
     <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: '#070707' }}>
       {/* Viewport Top 2px Shimmering Journey Progress Bar */}
@@ -244,7 +241,7 @@ export function App() {
       {/* Cinematic Vignette Overlay */}
       <div className="vignette-layer" />
 
-      {/* Top Floating Glass Navigation Header */}
+      {/* Top Floating Luxury Navigation Header */}
       <header
         style={{
           position: 'fixed',
@@ -252,245 +249,194 @@ export function App() {
           left: 0,
           right: 0,
           zIndex: 60,
-          padding: 'clamp(0.6rem, 1.8vw, 0.95rem) clamp(0.75rem, 2.5vw, 2.5rem)',
+          padding: '0.75rem clamp(1rem, 2.5vw, 3.5rem)',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '0.45rem',
-          pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, rgba(7,7,7,0.92) 0%, rgba(7,7,7,0.7) 70%, transparent 100%)',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          background: 'rgba(7, 7, 7, 0.88)',
+          borderBottom: '1px solid rgba(197, 168, 128, 0.14)',
+          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.5)',
         }}
       >
-        {/* Main Header Bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          {/* Brand Identity */}
-          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <a
-              href="#scene-hero"
-              onClick={(e) => {
-                e.preventDefault();
-                jumpToScene(0);
-              }}
-              style={{
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-              }}
-            >
-              <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.25rem)' }}>⚜️</span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)',
-                  fontWeight: 800,
-                  letterSpacing: '0.18em',
-                  color: '#FFF',
-                }}
-              >
-                ENCINAS
-              </span>
-              <span
-                style={{
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: 'var(--gold-primary)',
-                  borderLeft: '1px solid rgba(255,255,255,0.2)',
-                  paddingLeft: '0.55rem',
-                  fontWeight: 600,
-                }}
-              >
-                DUBAI
-              </span>
-            </a>
-          </div>
-
-          {/* Center Minimal Active Scene Tracker (Desktop) */}
-          <div
-            className="hidden md:flex items-center gap-3 glass-pill"
+        {/* Brand Identity */}
+        <a
+          href="#scene-hero"
+          onClick={(e) => {
+            e.preventDefault();
+            jumpToScene(0);
+          }}
+          aria-label="Encinas Dubai - Return to Horizon"
+          style={{
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            cursor: 'pointer',
+          }}
+        >
+          <span style={{ fontSize: '1.25rem' }}>⚜️</span>
+          <span
             style={{
-              pointerEvents: 'auto',
-              padding: '0.4rem 1.1rem',
-              borderRadius: '9999px',
-              fontSize: '0.72rem',
-              letterSpacing: '0.16em',
-              color: 'var(--gold-light)',
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.1rem, 3.2vw, 1.35rem)',
+              fontWeight: 800,
+              letterSpacing: '0.18em',
+              color: '#FFF',
             }}
           >
-            <span style={{ opacity: 0.5, fontFamily: 'var(--font-serif)' }}>
-              SCENE {((currentSceneIndex + 1).toString().padStart(2, '0'))}
-            </span>
-            <span style={{ opacity: 0.3 }}>•</span>
-            <span style={{ fontWeight: 600 }}>{currentScene.title}</span>
-          </div>
+            ENCINAS
+          </span>
+          <span
+            style={{
+              fontSize: '0.62rem',
+              letterSpacing: '0.24em',
+              textTransform: 'uppercase',
+              color: 'var(--gold-primary)',
+              borderLeft: '1px solid rgba(255,255,255,0.2)',
+              paddingLeft: '0.55rem',
+              fontWeight: 600,
+            }}
+          >
+            DUBAI
+          </span>
+        </a>
 
-          {/* Right Actions: Currency Selector + Sound + CMS Access + CTA */}
-          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 1.2vw, 0.75rem)' }}>
-            {/* Multi-Currency Toggle */}
-            <div
-              className="glass-pill hidden sm:inline-flex"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px',
-                borderRadius: '9999px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'rgba(12, 12, 12, 0.7)',
-              }}
-              title="Select display currency"
-            >
-              {(['AED', 'USD', 'EUR', 'GBP'] as Currency[]).map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCurrency(c)}
-                  style={{
-                    background: currency === c ? 'rgba(197, 168, 128, 0.25)' : 'transparent',
-                    border: 'none',
-                    color: currency === c ? 'var(--gold-light)' : 'var(--text-dim)',
-                    borderRadius: '9999px',
-                    padding: '0.22rem 0.55rem',
-                    fontSize: '0.66rem',
-                    letterSpacing: '0.08em',
-                    fontWeight: currency === c ? 700 : 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
+        {/* Center Desktop Editorial Navigation Links */}
+        <nav
+          aria-label="Primary Navigation"
+          className="hidden lg:flex items-center gap-8"
+        >
+          {[
+            { label: 'Residences', id: 'scene-properties', index: 1 },
+            { label: 'Territories', id: 'scene-communities', index: 2 },
+            { label: 'Developers', id: 'scene-developers', index: 3 },
+            { label: 'Advisory', id: 'scene-investment', index: 4 },
+            { label: 'Portfolio', id: 'property-discovery', index: 7 },
+          ].map((item) => {
+            const isActive = currentSceneIndex === item.index;
+            return (
+              <button
+                key={item.label}
+                onClick={() => {
+                  const el = document.getElementById(item.id);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: isActive ? 'var(--gold-light)' : 'var(--text-secondary)',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  padding: '0.35rem 0',
+                  position: 'relative',
+                  transition: 'color 0.25s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold-light)')}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)';
+                }}
+              >
+                {item.label}
+                {isActive && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      bottom: -2,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '16px',
+                      height: '1.5px',
+                      background: 'var(--gold-primary)',
+                      borderRadius: '1px',
+                    }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </nav>
 
-            {/* Audio Ambience Synthesizer */}
-            <AudioAmbience />
-
-            {/* Admin CMS Access (Protected by Login Gateway) */}
-            <button
-              onClick={handleOpenAdmin}
-              className="glass-pill"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.45rem clamp(0.5rem, 1.2vw, 0.85rem)',
-                borderRadius: '9999px',
-                fontSize: '0.72rem',
-                letterSpacing: '0.12em',
-                color: isAuthenticated ? 'var(--gold-light)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                border: isAuthenticated ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.1)',
-              }}
-              title={isAuthenticated ? 'Open CMS Builder (Authenticated)' : 'Sign In to Operational CMS'}
-            >
-              {isAuthenticated ? <Settings size={13} color="var(--gold-primary)" /> : <Lock size={12} color="var(--gold-primary)" />}
-              <span className="hidden sm:inline">CMS BUILDER</span>
-            </button>
-
-            {/* Direct Consultation CTA */}
-            <button
-              onClick={scrollToConsultation}
-              className="btn-gold"
-              style={{ padding: '0.45rem clamp(0.65rem, 1.8vw, 1.25rem)', fontSize: 'clamp(0.65rem, 1.6vw, 0.72rem)' }}
-            >
-              <span className="hidden sm:inline">CONSULTATION</span>
-              <span className="sm:hidden">CONSULT</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Dedicated Scene Tracker (Mobile: touch-interactive with stepping) */}
-        <div className="flex md:hidden justify-center items-center w-full pointer-events-auto">
+        {/* Right Actions: Currency Selector + Sound + CMS Access + CTA */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.45rem, 1.2vw, 0.85rem)' }}>
+          {/* Multi-Currency Toggle */}
           <div
-            onClick={() => jumpToScene(currentSceneIndex)}
+            className="glass-pill hidden sm:inline-flex"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '2px',
+              borderRadius: '9999px',
+              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(12, 12, 12, 0.75)',
+            }}
+            role="group"
+            aria-label="Display currency selection"
+          >
+            {(['AED', 'USD', 'EUR', 'GBP'] as Currency[]).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCurrency(c)}
+                aria-label={`Switch currency to ${c}`}
+                aria-pressed={currency === c}
+                style={{
+                  background: currency === c ? 'rgba(197, 168, 128, 0.25)' : 'transparent',
+                  border: 'none',
+                  color: currency === c ? 'var(--gold-light)' : 'var(--text-dim)',
+                  borderRadius: '9999px',
+                  padding: '0.22rem 0.55rem',
+                  fontSize: '0.66rem',
+                  letterSpacing: '0.08em',
+                  fontWeight: currency === c ? 700 : 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+
+          {/* Audio Ambience Synthesizer */}
+          <AudioAmbience />
+
+          {/* Admin CMS Access (Protected by Login Gateway) */}
+          <button
+            onClick={handleOpenAdmin}
+            aria-label={isAuthenticated ? 'Open CMS Builder (Authenticated)' : 'Sign In to Operational CMS'}
             className="glass-pill"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
               gap: '0.45rem',
-              padding: '0.26rem 0.75rem',
+              padding: '0.45rem clamp(0.55rem, 1.2vw, 0.85rem)',
               borderRadius: '9999px',
-              fontSize: '0.68rem',
+              fontSize: '0.72rem',
               letterSpacing: '0.12em',
-              color: 'var(--gold-light)',
-              border: '1px solid rgba(197, 168, 128, 0.3)',
-              background: 'rgba(14, 13, 12, 0.88)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              maxWidth: '96vw',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+              color: isAuthenticated ? 'var(--gold-light)' : 'var(--text-secondary)',
               cursor: 'pointer',
+              border: isAuthenticated ? '1px solid var(--border-gold)' : '1px solid rgba(255,255,255,0.1)',
             }}
-            title="Current Scene - Tap to focus"
           >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (currentSceneIndex > 0) jumpToScene(currentSceneIndex - 1);
-              }}
-              disabled={currentSceneIndex === 0}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: currentSceneIndex === 0 ? 'rgba(255,255,255,0.2)' : 'var(--gold-primary)',
-                cursor: currentSceneIndex === 0 ? 'default' : 'pointer',
-                padding: '0 2px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Previous scene"
-            >
-              <ChevronLeft size={13} />
-            </button>
+            {isAuthenticated ? <Settings size={13} color="var(--gold-primary)" /> : <Lock size={12} color="var(--gold-primary)" />}
+            <span className="hidden md:inline">CMS BUILDER</span>
+          </button>
 
-            <span style={{ fontFamily: 'var(--font-serif)', color: 'var(--gold-primary)', fontWeight: 700, fontSize: '0.72rem' }}>
-              SCENE {((currentSceneIndex + 1).toString().padStart(2, '0'))}
-            </span>
-            <span style={{ opacity: 0.35 }}>•</span>
-            <span
-              style={{
-                fontWeight: 600,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                maxWidth: '52vw',
-                color: 'var(--text-primary)',
-              }}
-            >
-              {currentScene.title}
-            </span>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (currentSceneIndex < activeScenes.length - 1) jumpToScene(currentSceneIndex + 1);
-              }}
-              disabled={currentSceneIndex === activeScenes.length - 1}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: currentSceneIndex === activeScenes.length - 1 ? 'rgba(255,255,255,0.2)' : 'var(--gold-primary)',
-                cursor: currentSceneIndex === activeScenes.length - 1 ? 'default' : 'pointer',
-                padding: '0 2px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Next scene"
-            >
-              <ChevronRight size={13} />
-            </button>
-          </div>
+          {/* Direct Consultation CTA */}
+          <button
+            onClick={scrollToConsultation}
+            aria-label="Request confidential advisory consultation"
+            className="btn-gold"
+            style={{ padding: '0.48rem clamp(0.75rem, 1.8vw, 1.35rem)', fontSize: 'clamp(0.68rem, 1.6vw, 0.74rem)', letterSpacing: '0.12em' }}
+          >
+            <span>PRIVATE ADVISORY</span>
+          </button>
         </div>
       </header>
-
-      {/* Persistent Elegant Timeline Indicator Rail (Desktop left fixed rail) */}
-      <TimelineIndicator
-        scenes={activeScenes}
-        currentSceneIndex={currentSceneIndex}
-        globalProgress={globalProgress}
-        onSelectScene={jumpToScene}
-        visible={true}
-      />
 
       {/* ================================================================ */}
       {/* 01 — HERO SCENE: THE HORIZON (DUBAI SKYLINE EMERGENCE)           */}
@@ -534,6 +480,7 @@ export function App() {
           <PropertyReelScene
             properties={properties}
             progress={propertyReelProgress}
+            currency={currency}
             onSelectProperty={(p) => setSelectedProperty(p)}
             onInquire={() => scrollToConsultation()}
           />
