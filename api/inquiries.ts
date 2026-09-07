@@ -18,7 +18,7 @@ function getTurso() {
 export default async function handler(req: any, res: any) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -28,22 +28,6 @@ export default async function handler(req: any, res: any) {
   try {
     const db = getTurso();
 
-    // Ensure inquiries table exists
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS inquiries (
-        id TEXT PRIMARY KEY,
-        fullName TEXT NOT NULL,
-        email TEXT NOT NULL,
-        phone TEXT NOT NULL,
-        preferredCommunity TEXT,
-        capitalAllocation TEXT,
-        timeline TEXT,
-        notes TEXT,
-        status TEXT DEFAULT 'New',
-        createdAt TEXT NOT NULL
-      );
-    `);
-
     // GET /api/inquiries - Fetch all inquiries for CMS
     if (req.method === 'GET') {
       const result = await db.execute('SELECT * FROM inquiries ORDER BY createdAt DESC');
@@ -52,11 +36,13 @@ export default async function handler(req: any, res: any) {
         fullName: row.fullName,
         email: row.email,
         phone: row.phone,
-        preferredCommunity: row.preferredCommunity,
-        capitalAllocation: row.capitalAllocation,
-        timeline: row.timeline,
-        notes: row.notes,
-        status: row.status,
+        country: row.country || '',
+        investmentBudget: row.investmentBudget || '',
+        preferredAssetType: row.preferredAssetType || '',
+        preferredCommunity: row.preferredCommunity || '',
+        timeframe: row.timeframe || '',
+        notes: row.notes || '',
+        status: row.status || 'New',
         createdAt: row.createdAt,
       }));
       return res.status(200).json(rows);
@@ -70,16 +56,31 @@ export default async function handler(req: any, res: any) {
       const status = data.status || 'New';
 
       await db.execute({
-        sql: `INSERT INTO inquiries (id, fullName, email, phone, preferredCommunity, capitalAllocation, timeline, notes, status, createdAt)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        sql: `INSERT INTO inquiries (
+          id, fullName, email, phone, country, investmentBudget,
+          preferredAssetType, preferredCommunity, timeframe, notes, status, createdAt
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          fullName = excluded.fullName,
+          email = excluded.email,
+          phone = excluded.phone,
+          country = excluded.country,
+          investmentBudget = excluded.investmentBudget,
+          preferredAssetType = excluded.preferredAssetType,
+          preferredCommunity = excluded.preferredCommunity,
+          timeframe = excluded.timeframe,
+          notes = excluded.notes,
+          status = excluded.status`,
         args: [
           id,
           data.fullName || '',
           data.email || '',
           data.phone || '',
+          data.country || '',
+          data.investmentBudget || '',
+          data.preferredAssetType || '',
           data.preferredCommunity || '',
-          data.capitalAllocation || '',
-          data.timeline || '',
+          data.timeframe || '',
           data.notes || '',
           status,
           createdAt,
@@ -92,15 +93,44 @@ export default async function handler(req: any, res: any) {
     // PATCH /api/inquiries - Update inquiry status in CMS
     if (req.method === 'PATCH') {
       const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      const { id, status } = data;
+      const { id, status, notes } = data;
 
-      if (!id || !status) {
-        return res.status(400).json({ error: 'id and status are required' });
+      if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+      }
+
+      if (status && notes !== undefined) {
+        await db.execute({
+          sql: 'UPDATE inquiries SET status = ?, notes = ? WHERE id = ?',
+          args: [status, notes, id],
+        });
+      } else if (status) {
+        await db.execute({
+          sql: 'UPDATE inquiries SET status = ? WHERE id = ?',
+          args: [status, id],
+        });
+      } else if (notes !== undefined) {
+        await db.execute({
+          sql: 'UPDATE inquiries SET notes = ? WHERE id = ?',
+          args: [notes, id],
+        });
+      }
+
+      return res.status(200).json({ success: true });
+    }
+
+    // DELETE /api/inquiries - Delete inquiry in CMS
+    if (req.method === 'DELETE') {
+      const data = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      const id = req.query?.id || data.id;
+
+      if (!id) {
+        return res.status(400).json({ error: 'Inquiry id is required' });
       }
 
       await db.execute({
-        sql: 'UPDATE inquiries SET status = ? WHERE id = ?',
-        args: [status, id],
+        sql: 'DELETE FROM inquiries WHERE id = ?',
+        args: [id],
       });
 
       return res.status(200).json({ success: true });
@@ -108,7 +138,7 @@ export default async function handler(req: any, res: any) {
 
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error: any) {
-    console.error('Turso API error:', error);
+    console.error('Turso inquiries API error:', error);
     return res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 }

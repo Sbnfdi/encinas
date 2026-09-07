@@ -28,7 +28,7 @@ import { AdminPortal } from './components/admin/AdminPortal';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { TimelineIndicator } from './components/cinematic/TimelineIndicator';
 import { Settings, Lock, Compass, ArrowDown, Menu, X } from 'lucide-react';
-import { submitInquiryToTurso, fetchInquiriesFromTurso } from './lib/tursoClient';
+import { submitInquiryToTurso, fetchInquiriesFromTurso, fetchPropertiesFromTurso, fetchScenesFromTurso } from './lib/tursoClient';
 
 export function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -148,12 +148,26 @@ export function App() {
     localStorage.setItem('encinas_timeline_scenes', JSON.stringify(updated));
   };
 
-  // Sync inquiries from Turso on mount
+  // Sync inquiries, properties, and scenes from Turso on mount
   useEffect(() => {
     fetchInquiriesFromTurso().then((tursoInquiries) => {
       if (tursoInquiries && tursoInquiries.length > 0) {
         setInquiries(tursoInquiries);
         localStorage.setItem('encinas_inquiries', JSON.stringify(tursoInquiries));
+      }
+    });
+
+    fetchPropertiesFromTurso().then((tursoProperties) => {
+      if (tursoProperties && tursoProperties.length > 0) {
+        setProperties(tursoProperties);
+        localStorage.setItem('encinas_properties', JSON.stringify(tursoProperties));
+      }
+    });
+
+    fetchScenesFromTurso().then((tursoScenes) => {
+      if (tursoScenes && tursoScenes.length > 0) {
+        setTimelineScenes(tursoScenes);
+        localStorage.setItem('encinas_timeline_scenes', JSON.stringify(tursoScenes));
       }
     });
   }, []);

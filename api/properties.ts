@@ -18,7 +18,7 @@ function getTurso() {
 export default async function handler(req: any, res: any) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -28,50 +28,31 @@ export default async function handler(req: any, res: any) {
   try {
     const db = getTurso();
 
-    // Ensure properties table exists
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS properties (
-        id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
-        developer TEXT NOT NULL,
-        community TEXT NOT NULL,
-        priceAed REAL NOT NULL,
-        bedrooms INTEGER,
-        propertyType TEXT,
-        status TEXT,
-        featuredImage TEXT,
-        galleryImages TEXT,
-        description TEXT,
-        features TEXT,
-        specs TEXT,
-        views TEXT,
-        architecturalStyle TEXT,
-        completionDate TEXT,
-        handoverStatus TEXT
-      );
-    `);
-
     // GET /api/properties - Fetch all properties
     if (req.method === 'GET') {
       const result = await db.execute('SELECT * FROM properties');
       const rows = result.rows.map((row: any) => ({
         id: row.id,
         title: row.title,
+        tagline: row.tagline || '',
         developer: row.developer,
         community: row.community,
-        priceAed: Number(row.priceAed),
-        bedrooms: Number(row.bedrooms),
-        propertyType: row.propertyType,
+        type: row.type,
+        priceAED: Number(row.priceAED),
+        priceUSD: row.priceUSD || '',
+        startingPriceText: row.startingPriceText || '',
+        bedrooms: row.bedrooms || '',
+        builtUpAreaSqFt: row.builtUpAreaSqFt || '',
+        completionDate: row.completionDate || '',
         status: row.status,
         featuredImage: row.featuredImage,
-        galleryImages: row.galleryImages ? JSON.parse(row.galleryImages) : [],
-        description: row.description,
-        features: row.features ? JSON.parse(row.features) : [],
-        specs: row.specs ? JSON.parse(row.specs) : {},
-        views: row.views ? JSON.parse(row.views) : [],
-        architecturalStyle: row.architecturalStyle,
-        completionDate: row.completionDate,
-        handoverStatus: row.handoverStatus,
+        gallery: row.gallery ? JSON.parse(row.gallery) : [],
+        description: row.description || '',
+        architectureNarrative: row.architectureNarrative || '',
+        amenities: row.amenities ? JSON.parse(row.amenities) : [],
+        keyFeatures: row.keyFeatures ? JSON.parse(row.keyFeatures) : [],
+        paymentPlan: row.paymentPlan ? JSON.parse(row.paymentPlan) : {},
+        isFeaturedInTimeline: Boolean(row.isFeaturedInTimeline),
       }));
       return res.status(200).json(rows);
     }
@@ -83,49 +64,75 @@ export default async function handler(req: any, res: any) {
 
       await db.execute({
         sql: `INSERT INTO properties (
-                id, title, developer, community, priceAed, bedrooms, propertyType, status,
-                featuredImage, galleryImages, description, features, specs, views,
-                architecturalStyle, completionDate, handoverStatus
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-              ON CONFLICT(id) DO UPDATE SET
-                title = excluded.title,
-                developer = excluded.developer,
-                community = excluded.community,
-                priceAed = excluded.priceAed,
-                bedrooms = excluded.bedrooms,
-                propertyType = excluded.propertyType,
-                status = excluded.status,
-                featuredImage = excluded.featuredImage,
-                galleryImages = excluded.galleryImages,
-                description = excluded.description,
-                features = excluded.features,
-                specs = excluded.specs,
-                views = excluded.views,
-                architecturalStyle = excluded.architecturalStyle,
-                completionDate = excluded.completionDate,
-                handoverStatus = excluded.handoverStatus`,
+          id, title, tagline, developer, community, type, priceAED, priceUSD,
+          startingPriceText, bedrooms, builtUpAreaSqFt, completionDate, status,
+          featuredImage, gallery, description, architectureNarrative, amenities,
+          keyFeatures, paymentPlan, isFeaturedInTimeline
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          title = excluded.title,
+          tagline = excluded.tagline,
+          developer = excluded.developer,
+          community = excluded.community,
+          type = excluded.type,
+          priceAED = excluded.priceAED,
+          priceUSD = excluded.priceUSD,
+          startingPriceText = excluded.startingPriceText,
+          bedrooms = excluded.bedrooms,
+          builtUpAreaSqFt = excluded.builtUpAreaSqFt,
+          completionDate = excluded.completionDate,
+          status = excluded.status,
+          featuredImage = excluded.featuredImage,
+          gallery = excluded.gallery,
+          description = excluded.description,
+          architectureNarrative = excluded.architectureNarrative,
+          amenities = excluded.amenities,
+          keyFeatures = excluded.keyFeatures,
+          paymentPlan = excluded.paymentPlan,
+          isFeaturedInTimeline = excluded.isFeaturedInTimeline`,
         args: [
           id,
           data.title || '',
+          data.tagline || '',
           data.developer || '',
           data.community || '',
-          data.priceAed || 0,
-          data.bedrooms || 0,
-          data.propertyType || '',
-          data.status || 'Active',
-          data.featuredImage || '',
-          JSON.stringify(data.galleryImages || []),
-          data.description || '',
-          JSON.stringify(data.features || []),
-          JSON.stringify(data.specs || {}),
-          JSON.stringify(data.views || []),
-          data.architecturalStyle || '',
+          data.type || 'Waterfront Villa',
+          Number(data.priceAED) || 0,
+          data.priceUSD || '',
+          data.startingPriceText || '',
+          data.bedrooms || '',
+          data.builtUpAreaSqFt || '',
           data.completionDate || '',
-          data.handoverStatus || '',
+          data.status || 'Off-Plan Exclusive',
+          data.featuredImage || '',
+          JSON.stringify(data.gallery || []),
+          data.description || '',
+          data.architectureNarrative || '',
+          JSON.stringify(data.amenities || []),
+          JSON.stringify(data.keyFeatures || []),
+          JSON.stringify(data.paymentPlan || {}),
+          data.isFeaturedInTimeline ? 1 : 0,
         ],
       });
 
       return res.status(200).json({ success: true, id });
+    }
+
+    // DELETE /api/properties - Delete property
+    if (req.method === 'DELETE') {
+      const data = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      const id = req.query?.id || data.id;
+
+      if (!id) {
+        return res.status(400).json({ error: 'Property id is required' });
+      }
+
+      await db.execute({
+        sql: 'DELETE FROM properties WHERE id = ?',
+        args: [id],
+      });
+
+      return res.status(200).json({ success: true });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });

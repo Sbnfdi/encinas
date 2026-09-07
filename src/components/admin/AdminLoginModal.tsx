@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { FC, FormEvent } from 'react';
-import { Lock, Eye, EyeOff, X, ShieldAlert, Sparkles, KeyRound } from 'lucide-react';
+import { Lock, Eye, EyeOff, X, ShieldAlert, Sparkles } from 'lucide-react';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
 
   if (!isOpen) return null;
 
-  const validKeys = ['encinas2026', 'admin', 'dubai2026', 'master'];
+  const MASTER_KEY = 'UsamasamUsamaalikhannominomannomanalikhanabdullahabdullahzahidabdullahzahidraja';
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -34,8 +34,8 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
     setIsLoading(true);
 
     setTimeout(() => {
-      const trimmed = accessKey.trim().toLowerCase();
-      if (validKeys.includes(trimmed)) {
+      const trimmed = accessKey.trim();
+      if (trimmed === MASTER_KEY) {
         if (rememberSession) {
           localStorage.setItem('encinas_admin_auth', 'true');
         }
@@ -44,14 +44,9 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
         onSuccessLogin();
       } else {
         setIsLoading(false);
-        setError('Invalid sovereign access key. Check the credential hint or click Auto-Fill.');
+        setError('Invalid sovereign access key. Access denied.');
       }
-    }, 450);
-  };
-
-  const handleQuickFill = () => {
-    setAccessKey('encinas2026');
-    setError(null);
+    }, 400);
   };
 
   return (
@@ -207,29 +202,8 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                     fontWeight: 600,
                   }}
                 >
-                  Master Passkey
+                  Sovereign Master Passkey
                 </label>
-                <button
-                  type="button"
-                  onClick={handleQuickFill}
-                  aria-label="Auto-fill demo access key"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--gold-primary)',
-                    fontSize: '0.72rem',
-                    letterSpacing: '0.06em',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.3rem',
-                    padding: 0,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  <KeyRound size={11} aria-hidden="true" />
-                  <span>Auto-Fill Demo Key</span>
-                </button>
               </div>
 
               <div style={{ position: 'relative' }}>
@@ -240,7 +214,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                   aria-required="true"
                   autoFocus
                   value={accessKey}
-                  placeholder="Enter key (e.g. encinas2026)"
+                  placeholder="Enter Sovereign Master Passkey"
                   onChange={(e) => setAccessKey(e.target.value)}
                   style={{
                     width: '100%',

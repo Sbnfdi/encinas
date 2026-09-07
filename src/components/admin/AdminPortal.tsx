@@ -18,6 +18,13 @@ import {
   Trash2,
   X
 } from 'lucide-react';
+import {
+  savePropertyToTurso,
+  deletePropertyFromTurso,
+  saveSceneToTurso,
+  deleteSceneFromTurso,
+  updateInquiryStatusInTurso,
+} from '../../lib/tursoClient';
 
 interface AdminPortalProps {
   timelineScenes: TimelineScene[];
@@ -96,6 +103,11 @@ export const AdminPortal: FC<AdminPortalProps> = ({
   };
 
   const toggleSceneActive = (id: string) => {
+    const target = timelineScenes.find((s) => s.id === id);
+    if (target) {
+      const updatedScene = { ...target, isActive: !target.isActive };
+      saveSceneToTurso(updatedScene).catch((err) => console.warn('Turso scene sync error:', err));
+    }
     const updated = timelineScenes.map((s) => (s.id === id ? { ...s, isActive: !s.isActive } : s));
     onUpdateScenes(updated);
     showToast('Scene visibility toggled');
@@ -103,6 +115,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
 
   const deleteScene = (id: string) => {
     if (window.confirm('Are you sure you want to remove this scene from the cinematic timeline?')) {
+      deleteSceneFromTurso(id).catch((err) => console.warn('Turso scene delete error:', err));
       const updated = timelineScenes.filter((s) => s.id !== id).map((s, idx) => ({ ...s, order: idx + 1 }));
       onUpdateScenes(updated);
       showToast('Scene removed from timeline');
@@ -114,19 +127,24 @@ export const AdminPortal: FC<AdminPortalProps> = ({
     if (!editingScene) return;
 
     let updated: TimelineScene[];
+    let targetScene: TimelineScene;
     if (isCreatingScene) {
-      const newScene: TimelineScene = {
+      targetScene = {
         ...editingScene,
         id: `scene-${Date.now()}`,
         order: timelineScenes.length + 1,
         isActive: true,
       };
-      updated = [...timelineScenes, newScene];
+      updated = [...timelineScenes, targetScene];
       showToast('New timeline scene created');
     } else {
+      targetScene = editingScene;
       updated = timelineScenes.map((s) => (s.id === editingScene.id ? editingScene : s));
       showToast('Timeline scene updated');
     }
+
+    // Sync to Turso
+    saveSceneToTurso(targetScene).catch((err) => console.warn('Turso save scene error:', err));
 
     onUpdateScenes(updated);
     setEditingScene(null);
@@ -136,6 +154,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
   // Property CRUD Handlers
   const deleteProperty = (id: string) => {
     if (window.confirm('Are you sure you want to permanently delete this property allocation?')) {
+      deletePropertyFromTurso(id).catch((err) => console.warn('Turso property delete error:', err));
       const updated = properties.filter((p) => p.id !== id);
       onUpdateProperties(updated);
       showToast('Property deleted from portfolio');
@@ -147,17 +166,22 @@ export const AdminPortal: FC<AdminPortalProps> = ({
     if (!editingProperty) return;
 
     let updated: Property[];
+    let targetProp: Property;
     if (isCreatingProperty) {
-      const newProp: Property = {
+      targetProp = {
         ...editingProperty,
         id: `prop-${Date.now()}`,
       };
-      updated = [newProp, ...properties];
+      updated = [targetProp, ...properties];
       showToast('New ultra-luxury property added');
     } else {
+      targetProp = editingProperty;
       updated = properties.map((p) => (p.id === editingProperty.id ? editingProperty : p));
       showToast('Property details updated');
     }
+
+    // Sync to Turso
+    savePropertyToTurso(targetProp).catch((err) => console.warn('Turso save property error:', err));
 
     onUpdateProperties(updated);
     setEditingProperty(null);
@@ -165,6 +189,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
   };
 
   const handleInquiryStatusChange = (id: string, newStatus: ConsultationInquiry['status']) => {
+    updateInquiryStatusInTurso(id, newStatus).catch((err) => console.warn('Turso status update error:', err));
     const updated = inquiries.map((inq) => (inq.id === id ? { ...inq, status: newStatus } : inq));
     onUpdateInquiries(updated);
     showToast(`Inquiry status updated to ${newStatus}`);
