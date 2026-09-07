@@ -18,6 +18,7 @@ import {
   Trash2,
   X
 } from 'lucide-react';
+import { BrandLogo } from '../brand/BrandLogo';
 import {
   savePropertyToTurso,
   deletePropertyFromTurso,
@@ -264,7 +265,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <span style={{ fontSize: '1.25rem' }}>⚜️</span>
+            <BrandLogo variant="icon" color="gold" size={24} />
             <span
               style={{
                 fontFamily: 'var(--font-serif)',

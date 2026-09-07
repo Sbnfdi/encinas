@@ -27,6 +27,7 @@ import { PropertyDetailModal } from './components/discovery/PropertyDetailModal'
 import { AdminPortal } from './components/admin/AdminPortal';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { TimelineIndicator } from './components/cinematic/TimelineIndicator';
+import { BrandLogo } from './components/brand/BrandLogo';
 import { Settings, Lock, Compass, ArrowDown, Menu, X } from 'lucide-react';
 import { submitInquiryToTurso, fetchInquiriesFromTurso, fetchPropertiesFromTurso, fetchScenesFromTurso } from './lib/tursoClient';
 
@@ -323,7 +324,7 @@ export function App() {
             cursor: 'pointer',
           }}
         >
-          <span style={{ fontSize: '1.25rem' }}>⚜️</span>
+          <BrandLogo variant="icon" color="gold" size={26} />
           <span
             style={{
               fontFamily: 'var(--font-serif)',
@@ -811,8 +812,8 @@ export function App() {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '1.3rem' }}>⚜️</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+              <BrandLogo variant="icon" color="gold" size={32} />
               <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 800, letterSpacing: '0.15em', color: '#FFF' }}>
                 ENCINAS
               </span>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { FC, FormEvent } from 'react';
 import { Lock, Eye, EyeOff, X, ShieldAlert, Sparkles } from 'lucide-react';
+import { BrandLogo } from '../brand/BrandLogo';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -119,8 +120,8 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div
               style={{
-                width: '48px',
-                height: '48px',
+                width: '52px',
+                height: '52px',
                 margin: '0 auto 1rem auto',
                 borderRadius: '50%',
                 background: 'rgba(197, 168, 128, 0.08)',
@@ -128,10 +129,10 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1.4rem',
+                padding: '8px',
               }}
             >
-              ⚜️
+              <BrandLogo variant="icon" color="gold" size={32} />
             </div>
 
             <div

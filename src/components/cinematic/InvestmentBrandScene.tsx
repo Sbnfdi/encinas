@@ -1,6 +1,7 @@
 import type { TimelineScene } from '../../types';
 import type { FC } from 'react';
 import { Award, DollarSign, Globe, KeyRound, Lock, ShieldCheck } from 'lucide-react';
+import { BrandLogo } from '../brand/BrandLogo';
 
 interface InvestmentBrandSceneProps {
   scene: TimelineScene;
@@ -49,7 +50,7 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
             color: 'var(--gold-primary)',
           }}
         >
-          <ShieldCheck size={14} />
+          {isBrand ? <BrandLogo variant="icon" color="gold" size={16} /> : <ShieldCheck size={14} />}
           <span>{scene.metaBadge || (isBrand ? 'ENCINAS PHILOSOPHY' : 'CAPITAL & STRATEGY')}</span>
         </div>
 

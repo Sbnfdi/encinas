@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FC } from 'react';
 import { ChevronLeft, ChevronRight, ChevronUp, Layers, X } from 'lucide-react';
+import { BrandLogo } from '../brand/BrandLogo';
 import type { TimelineScene } from '../../types';
 
 interface TimelineIndicatorProps {
@@ -341,8 +342,8 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
                 marginBottom: '1rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1rem' }}>⚜️</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <BrandLogo variant="icon" color="gold" size={20} />
                 <span
                   style={{
                     fontFamily: 'var(--font-serif)',
