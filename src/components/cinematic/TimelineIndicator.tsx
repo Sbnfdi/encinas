@@ -272,6 +272,9 @@ export const TimelineIndicator: FC<TimelineIndicatorProps> = ({
       {/* ================================================================ */}
       {visible && isMobileDrawerOpen && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Architectural Timeline Navigation"
           className="md:hidden"
           style={{
             position: 'fixed',

@@ -111,22 +111,23 @@ export const AudioAmbience: FC = () => {
         letterSpacing: '0.12em',
       }}
       title={isPlaying ? 'Mute cinematic ambient audio' : 'Enable ambient soundtrack'}
-      aria-label="Toggle ambient soundtrack"
+      aria-label={isPlaying ? 'Mute cinematic ambient audio' : 'Enable ambient soundtrack'}
+      aria-pressed={isPlaying}
     >
       {isPlaying ? (
         <>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '14px' }} aria-hidden="true">
             <span className="wave-bar" style={{ height: '6px' }} />
             <span className="wave-bar" style={{ height: '14px' }} />
             <span className="wave-bar" style={{ height: '10px' }} />
             <span className="wave-bar" style={{ height: '12px' }} />
           </div>
-          <span className="hidden sm:inline">ATMOSPHERE</span>
+          <span className="sm:inline hidden">ATMOSPHERE</span>
         </>
       ) : (
         <>
-          <VolumeX size={14} style={{ opacity: 0.6 }} />
-          <span className="hidden sm:inline">SOUND: OFF</span>
+          <VolumeX size={14} style={{ opacity: 0.6 }} aria-hidden="true" />
+          <span className="sm:inline hidden">SOUND: OFF</span>
         </>
       )}
     </button>

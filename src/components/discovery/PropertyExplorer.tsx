@@ -138,20 +138,23 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <button
                 onClick={() => setShowFilterBar(!showFilterBar)}
+                aria-expanded={showFilterBar}
+                aria-controls="extended-filter-bar"
                 className="btn-secondary"
                 style={{ padding: '0.65rem 1.25rem', fontSize: '0.74rem' }}
               >
-                <SlidersHorizontal size={14} />
+                <SlidersHorizontal size={14} aria-hidden="true" />
                 <span>{showFilterBar ? 'HIDE FILTERS' : 'ADVANCED FILTERS'}</span>
               </button>
 
               <button
                 onClick={resetFilters}
+                aria-label="Reset all property filters"
                 className="btn-secondary"
                 style={{ padding: '0.65rem 1rem', fontSize: '0.74rem' }}
                 title="Reset all filters"
               >
-                <RotateCcw size={14} />
+                <RotateCcw size={14} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -159,6 +162,8 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
 
         {/* Quick Category Filter Chips */}
         <div
+          role="group"
+          aria-label="Filter by property category"
           style={{
             display: 'flex',
             gap: '0.6rem',
@@ -173,6 +178,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               <button
                 key={pill.id}
                 onClick={() => setFilters({ ...filters, type: pill.id })}
+                aria-pressed={isSelected}
                 style={{
                   padding: '0.5rem 1.1rem',
                   borderRadius: '9999px',
@@ -185,6 +191,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   cursor: 'pointer',
                   transition: 'all 0.25s ease',
                   whiteSpace: 'nowrap',
+                  minHeight: '40px',
                 }}
               >
                 {pill.label}
@@ -206,9 +213,14 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
           {/* Main Search Row */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: showFilterBar ? '1.5rem' : '0' }}>
             <div style={{ position: 'relative', flex: 2, minWidth: '260px' }}>
+              <label htmlFor="property-search-input" className="sr-only">
+                Search developments, developers, or island enclaves
+              </label>
               <input
-                type="text"
+                id="property-search-input"
+                type="search"
                 placeholder="Search developments, developers, or island enclaves..."
+                aria-label="Search developments, developers, or island enclaves"
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 style={{
@@ -221,13 +233,19 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   fontSize: '0.88rem',
                   outline: 'none',
                   boxSizing: 'border-box',
+                  minHeight: '44px',
                 }}
               />
-              <Search size={15} color="var(--gold-primary)" style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <Search size={15} color="var(--gold-primary)" aria-hidden="true" style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }} />
             </div>
 
             <div style={{ flex: 1, minWidth: '180px' }}>
+              <label htmlFor="property-community-filter" className="sr-only">
+                Filter by Community
+              </label>
               <select
+                id="property-community-filter"
+                aria-label="Filter by community"
                 value={filters.community}
                 onChange={(e) => setFilters({ ...filters, community: e.target.value })}
                 style={{
@@ -240,6 +258,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   fontSize: '0.84rem',
                   outline: 'none',
                   boxSizing: 'border-box',
+                  minHeight: '44px',
                 }}
               >
                 <option value="ALL">All Communities</option>
@@ -250,7 +269,12 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
             </div>
 
             <div style={{ flex: 1, minWidth: '180px' }}>
+              <label htmlFor="property-developer-filter" className="sr-only">
+                Filter by Developer
+              </label>
               <select
+                id="property-developer-filter"
+                aria-label="Filter by developer"
                 value={filters.developer}
                 onChange={(e) => setFilters({ ...filters, developer: e.target.value })}
                 style={{
@@ -263,6 +287,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   fontSize: '0.84rem',
                   outline: 'none',
                   boxSizing: 'border-box',
+                  minHeight: '44px',
                 }}
               >
                 <option value="ALL">All Developers</option>
@@ -276,6 +301,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
           {/* Extended Filters */}
           {showFilterBar && (
             <div
+              id="extended-filter-bar"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -285,10 +311,14 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               }}
             >
               <div>
-                <label style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+                <label
+                  htmlFor="property-type-filter"
+                  style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.4rem', fontWeight: 600 }}
+                >
                   Property Classification
                 </label>
                 <select
+                  id="property-type-filter"
                   value={filters.type}
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
                   style={{
@@ -301,6 +331,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     fontSize: '0.84rem',
                     outline: 'none',
                     boxSizing: 'border-box',
+                    minHeight: '44px',
                   }}
                 >
                   <option value="ALL">All Types</option>
@@ -312,10 +343,14 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+                <label
+                  htmlFor="property-status-filter"
+                  style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.4rem', fontWeight: 600 }}
+                >
                   Allocation Status
                 </label>
                 <select
+                  id="property-status-filter"
                   value={filters.status}
                   onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                   style={{
@@ -328,6 +363,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     fontSize: '0.84rem',
                     outline: 'none',
                     boxSizing: 'border-box',
+                    minHeight: '44px',
                   }}
                 >
                   <option value="ALL">All Statuses</option>
@@ -339,10 +375,14 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+                <label
+                  htmlFor="property-budget-filter"
+                  style={{ display: 'block', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.4rem', fontWeight: 600 }}
+                >
                   Maximum Budget (AED)
                 </label>
                 <select
+                  id="property-budget-filter"
                   value={filters.maxPrice}
                   onChange={(e) => setFilters({ ...filters, maxPrice: Number(e.target.value) })}
                   style={{
@@ -355,6 +395,7 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                     fontSize: '0.84rem',
                     outline: 'none',
                     boxSizing: 'border-box',
+                    minHeight: '44px',
                   }}
                 >
                   <option value="100000000">Any Price Cap</option>
@@ -540,22 +581,24 @@ export const PropertyExplorer: FC<PropertyExplorerProps> = ({
                   <div style={{ display: 'flex', gap: '0.6rem' }}>
                     <button
                       onClick={() => onSelectProperty(prop)}
+                      aria-label={`View full architectural details for ${prop.title}`}
                       className="btn-secondary"
-                      style={{ padding: '0.55rem 0.95rem', fontSize: '0.72rem' }}
+                      style={{ padding: '0.55rem 0.95rem', fontSize: '0.72rem', minHeight: '38px' }}
                       title="View full architectural timeline"
                     >
-                      <Eye size={13} />
+                      <Eye size={13} aria-hidden="true" />
                       <span>DETAILS</span>
                     </button>
 
                     <button
                       onClick={() => onInquireProperty(prop)}
+                      aria-label={`Inquire about allocation for ${prop.title}`}
                       className="btn-gold"
-                      style={{ padding: '0.55rem 0.95rem', fontSize: '0.72rem' }}
+                      style={{ padding: '0.55rem 0.95rem', fontSize: '0.72rem', minHeight: '38px' }}
                       title="Reserve allocation"
                     >
                       <span>INQUIRE</span>
-                      <ChevronRight size={13} />
+                      <ChevronRight size={13} aria-hidden="true" />
                     </button>
                   </div>
                 </div>

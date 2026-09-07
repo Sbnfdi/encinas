@@ -26,9 +26,11 @@ import { PropertyExplorer } from './components/discovery/PropertyExplorer';
 import { PropertyDetailModal } from './components/discovery/PropertyDetailModal';
 import { AdminPortal } from './components/admin/AdminPortal';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
-import { Settings, Lock, Compass, ArrowDown } from 'lucide-react';
+import { TimelineIndicator } from './components/cinematic/TimelineIndicator';
+import { Settings, Lock, Compass, ArrowDown, Menu, X } from 'lucide-react';
 
 export function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   // PERSISTED CMS STATE
   const [timelineScenes, setTimelineScenes] = useState<TimelineScene[]>(() => {
     const saved = localStorage.getItem('encinas_timeline_scenes');
@@ -220,6 +222,11 @@ export function App() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: '#070707' }}>
+      {/* Accessible Skip Navigation Link */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Viewport Top 2px Shimmering Journey Progress Bar */}
       <div
         style={{
@@ -241,6 +248,14 @@ export function App() {
       {/* Cinematic Vignette Overlay */}
       <div className="vignette-layer" />
 
+      {/* Vertical Architectural Timeline Indicator Rail */}
+      <TimelineIndicator
+        scenes={activeScenes}
+        currentSceneIndex={currentSceneIndex}
+        globalProgress={globalProgress}
+        onSelectScene={jumpToScene}
+      />
+
       {/* Top Floating Luxury Navigation Header */}
       <header
         style={{
@@ -255,7 +270,7 @@ export function App() {
           alignItems: 'center',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          background: 'rgba(7, 7, 7, 0.88)',
+          background: 'rgba(7, 7, 7, 0.9)',
           borderBottom: '1px solid rgba(197, 168, 128, 0.14)',
           boxShadow: '0 4px 24px rgba(0, 0, 0, 0.5)',
         }}
@@ -306,7 +321,7 @@ export function App() {
         {/* Center Desktop Editorial Navigation Links */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden lg:flex items-center gap-8"
+          className="lg:flex hidden items-center gap-8"
         >
           {[
             { label: 'Residences', id: 'scene-properties', index: 1 },
@@ -361,13 +376,12 @@ export function App() {
           })}
         </nav>
 
-        {/* Right Actions: Currency Selector + Sound + CMS Access + CTA */}
+        {/* Right Actions: Currency Selector + Sound + CMS Access + CTA + Mobile Hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.45rem, 1.2vw, 0.85rem)' }}>
           {/* Multi-Currency Toggle */}
           <div
-            className="glass-pill hidden sm:inline-flex"
+            className="glass-pill sm:inline-flex hidden"
             style={{
-              display: 'inline-flex',
               alignItems: 'center',
               padding: '2px',
               borderRadius: '9999px',
@@ -423,7 +437,7 @@ export function App() {
             }}
           >
             {isAuthenticated ? <Settings size={13} color="var(--gold-primary)" /> : <Lock size={12} color="var(--gold-primary)" />}
-            <span className="hidden md:inline">CMS BUILDER</span>
+            <span className="md:inline hidden">CMS BUILDER</span>
           </button>
 
           {/* Direct Consultation CTA */}
@@ -435,21 +449,161 @@ export function App() {
           >
             <span>PRIVATE ADVISORY</span>
           </button>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
+            aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            className="lg:hidden glass-pill"
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '2px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: 'var(--gold-light)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(12, 12, 12, 0.75)',
+            }}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </header>
 
-      {/* ================================================================ */}
-      {/* 01 — HERO SCENE: THE HORIZON (DUBAI SKYLINE EMERGENCE)           */}
-      {/* ================================================================ */}
-      <section id="scene-hero" style={{ position: 'relative', zIndex: 10 }}>
-        {heroScene && (
-          <HeroTimelineScene
-            scene={heroScene}
-            progress={Math.min(1, globalProgress * 6)}
-            onExploreClick={() => jumpToScene(1)}
-          />
-        )}
-      </section>
+      {/* Mobile Slide-Out Luxury Navigation Drawer */}
+      {isMobileMenuOpen && (
+        <div
+          id="mobile-nav-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation Menu"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 140,
+            backgroundColor: 'rgba(7, 7, 7, 0.97)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '5.5rem 2rem 2.5rem 2rem',
+            animation: 'fadeIn 0.25s ease-out',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ fontSize: '0.7rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--gold-primary)', fontWeight: 600 }}>
+              EXPLORE PORTFOLIO
+            </div>
+            {[
+              { label: 'Residences', id: 'scene-properties', index: 1 },
+              { label: 'Territories', id: 'scene-communities', index: 2 },
+              { label: 'Developers', id: 'scene-developers', index: 3 },
+              { label: 'Advisory', id: 'scene-investment', index: 4 },
+              { label: 'Portfolio Repertory', id: 'property-discovery', index: 7 },
+            ].map((item) => (
+              <button
+                key={item.label}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  const el = document.getElementById(item.id);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  textAlign: 'left',
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1.35rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  color: 'var(--text-primary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.5rem 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
+                <span>{item.label}</span>
+                <span style={{ fontSize: '0.9rem', color: 'var(--gold-primary)' }}>→</span>
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '0.75rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
+                Currency
+              </span>
+              <div style={{ display: 'flex', gap: '0.4rem' }}>
+                {(['AED', 'USD', 'EUR', 'GBP'] as Currency[]).map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setCurrency(c)}
+                    style={{
+                      background: currency === c ? 'rgba(197, 168, 128, 0.25)' : 'rgba(255,255,255,0.05)',
+                      border: currency === c ? '1px solid var(--border-gold)' : '1px solid transparent',
+                      color: currency === c ? 'var(--gold-light)' : 'var(--text-secondary)',
+                      padding: '0.35rem 0.65rem',
+                      borderRadius: '2px',
+                      fontSize: '0.75rem',
+                      fontWeight: currency === c ? 700 : 500,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                scrollToConsultation();
+              }}
+              className="btn-gold"
+              style={{ width: '100%', padding: '0.9rem' }}
+            >
+              <span>REQUEST PRIVATE ADVISORY</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleOpenAdmin();
+              }}
+              className="btn-secondary"
+              style={{ width: '100%', padding: '0.8rem', fontSize: '0.75rem' }}
+            >
+              <Lock size={13} color="var(--gold-primary)" />
+              <span>{isAuthenticated ? 'OPEN CMS BUILDER' : 'OPERATIONAL CMS SIGN IN'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Semantic Landmark for Accessibility */}
+      <main id="main-content">
+        {/* ================================================================ */}
+        {/* 01 — HERO SCENE: THE HORIZON (DUBAI SKYLINE EMERGENCE)           */}
+        {/* ================================================================ */}
+        <section id="scene-hero" style={{ position: 'relative', zIndex: 10 }}>
+          {heroScene && (
+            <HeroTimelineScene
+              scene={heroScene}
+              progress={Math.min(1, globalProgress * 6)}
+              onExploreClick={() => jumpToScene(1)}
+            />
+          )}
+        </section>
 
       {/* ================================================================ */}
       {/* 02 — PINNED HORIZONTAL PROPERTY REEL                             */}
@@ -641,6 +795,7 @@ export function App() {
           scrollToConsultation();
         }}
       />
+      </main>
 
       {/* Luxury Sovereign Footer */}
       <footer

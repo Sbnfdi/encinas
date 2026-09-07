@@ -105,23 +105,24 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', color: 'var(--gold-light)' }}>
             0{activeIdx + 1} <span style={{ opacity: 0.35, fontSize: '0.75rem' }}>/ 0{count}</span>
           </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             {featured.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setUserSelectedIdx(i)}
                 style={{
-                  width: i === activeIdx ? '28px' : '8px',
-                  height: '4px',
-                  backgroundColor: i === activeIdx ? 'var(--gold-primary)' : 'rgba(255,255,255,0.18)',
-                  borderRadius: '2px',
+                  width: i === activeIdx ? '32px' : '14px',
+                  height: '8px',
+                  backgroundColor: i === activeIdx ? 'var(--gold-primary)' : 'rgba(255,255,255,0.25)',
+                  borderRadius: '4px',
                   transition: 'all 0.35s ease',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
                 }}
                 title={`Residence 0${i + 1}`}
-                aria-label={`View Residence 0${i + 1}`}
+                aria-label={`View Residence 0${i + 1}: ${featured[i]?.title}`}
+                aria-pressed={i === activeIdx}
               />
             ))}
           </div>
@@ -370,20 +371,22 @@ export const PropertyReelScene: FC<PropertyReelSceneProps> = ({
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <button
                 onClick={() => onSelectProperty(currentProp)}
+                aria-label={`Explore architectural narrative for ${currentProp.title}`}
                 className="btn-gold"
                 style={{ flex: 1, minWidth: '170px', padding: '0.8rem 1.4rem' }}
               >
                 <span>EXPLORE ARCHITECTURE</span>
-                <Eye size={14} />
+                <Eye size={14} aria-hidden="true" />
               </button>
 
               <button
                 onClick={() => onInquire(currentProp)}
+                aria-label={`Inquire about private allocation for ${currentProp.title}`}
                 className="btn-secondary"
                 style={{ flex: 1, minWidth: '170px', padding: '0.8rem 1.4rem' }}
               >
                 <span>ALLOCATION BRIEF</span>
-                <ArrowRight size={14} />
+                <ArrowRight size={14} aria-hidden="true" />
               </button>
             </div>
           </div>

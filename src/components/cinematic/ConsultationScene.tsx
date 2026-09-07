@@ -158,9 +158,13 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
             }}
           >
             {isSuccess ? (
-              <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+              <div
+                role="status"
+                aria-live="polite"
+                style={{ textAlign: 'center', padding: '2rem 1rem' }}
+              >
                 <div style={{ display: 'inline-flex', padding: '1rem', borderRadius: '50%', background: 'rgba(197, 168, 128, 0.15)', color: 'var(--gold-light)', marginBottom: '1.25rem' }}>
-                  <CheckCircle size={40} />
+                  <CheckCircle size={40} aria-hidden="true" />
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#FFF', marginBottom: '0.8rem' }}>
                   Briefing Received
@@ -201,13 +205,18 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
-                    Full Legal Name *
+                  <label
+                    htmlFor="consultation-fullname"
+                    style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                  >
+                    Full Legal Name <span style={{ color: 'var(--gold-primary)' }} aria-hidden="true">*</span>
                   </label>
                   <div style={{ position: 'relative' }}>
                     <input
+                      id="consultation-fullname"
                       type="text"
                       required
+                      aria-required="true"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Lord Julian Sterling"
@@ -220,21 +229,27 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                         color: '#FFF',
                         fontSize: '0.88rem',
                         outline: 'none',
+                        minHeight: '44px',
                       }}
                     />
-                    <User size={14} color="var(--gold-primary)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+                    <User size={14} color="var(--gold-primary)" aria-hidden="true" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
-                      Email Address *
+                    <label
+                      htmlFor="consultation-email"
+                      style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                    >
+                      Email Address <span style={{ color: 'var(--gold-primary)' }} aria-hidden="true">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
                       <input
+                        id="consultation-email"
                         type="email"
                         required
+                        aria-required="true"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="client@familyoffice.com"
@@ -247,20 +262,26 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                           color: '#FFF',
                           fontSize: '0.88rem',
                           outline: 'none',
+                          minHeight: '44px',
                         }}
                       />
-                      <Mail size={14} color="var(--gold-primary)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+                      <Mail size={14} color="var(--gold-primary)" aria-hidden="true" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
                     </div>
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
-                      Direct Phone / WhatsApp *
+                    <label
+                      htmlFor="consultation-phone"
+                      style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                    >
+                      Direct Phone / WhatsApp <span style={{ color: 'var(--gold-primary)' }} aria-hidden="true">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
                       <input
+                        id="consultation-phone"
                         type="tel"
                         required
+                        aria-required="true"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="+971 50 000 0000"
@@ -273,19 +294,24 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                           color: '#FFF',
                           fontSize: '0.88rem',
                           outline: 'none',
+                          minHeight: '44px',
                         }}
                       />
-                      <Phone size={14} color="var(--gold-primary)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+                      <Phone size={14} color="var(--gold-primary)" aria-hidden="true" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
                     </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
+                    <label
+                      htmlFor="consultation-budget"
+                      style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                    >
                       Investment Budget
                     </label>
                     <select
+                      id="consultation-budget"
                       value={formData.investmentBudget}
                       onChange={(e) => setFormData({ ...formData, investmentBudget: e.target.value })}
                       style={{
@@ -297,6 +323,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                         color: '#FFF',
                         fontSize: '0.84rem',
                         outline: 'none',
+                        minHeight: '44px',
                       }}
                     >
                       <option value="$1,000,000 - $2,000,000">$1M - $2M (AED 3.7M - 7.3M)</option>
@@ -307,10 +334,14 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
+                    <label
+                      htmlFor="consultation-asset-type"
+                      style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                    >
                       Preferred Asset Type
                     </label>
                     <select
+                      id="consultation-asset-type"
                       value={formData.preferredAssetType}
                       onChange={(e) => setFormData({ ...formData, preferredAssetType: e.target.value })}
                       style={{
@@ -322,6 +353,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                         color: '#FFF',
                         fontSize: '0.84rem',
                         outline: 'none',
+                        minHeight: '44px',
                       }}
                     >
                       <option value="Waterfront Villa">Waterfront Villa / Island Palace</option>
@@ -333,10 +365,14 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>
+                  <label
+                    htmlFor="consultation-notes"
+                    style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.35rem', fontWeight: 600 }}
+                  >
                     Specific Acquisition Requirements
                   </label>
                   <textarea
+                    id="consultation-notes"
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -366,7 +402,7 @@ export const ConsultationScene: FC<ConsultationSceneProps> = ({
                   ) : (
                     <>
                       <span>CONFIRM PRIVATE BRIEFING</span>
-                      <Send size={15} />
+                      <Send size={15} aria-hidden="true" />
                     </>
                   )}
                 </button>

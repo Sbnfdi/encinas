@@ -110,11 +110,12 @@ export const HeroTimelineScene: FC<HeroTimelineSceneProps> = ({
         <div>
           <button
             onClick={onExploreClick}
+            aria-label="Explore curated Dubai residences"
             className="btn-gold"
             style={{ minWidth: '220px', padding: '0.9rem 2rem' }}
           >
             <span>EXPLORE RESIDENCES</span>
-            <ArrowDown size={14} />
+            <ArrowDown size={14} aria-hidden="true" />
           </button>
         </div>
       </div>

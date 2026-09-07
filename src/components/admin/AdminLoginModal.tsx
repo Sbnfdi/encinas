@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FC, FormEvent } from 'react';
 import { Lock, Eye, EyeOff, X, ShieldAlert, Sparkles, KeyRound } from 'lucide-react';
 
@@ -14,6 +14,15 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
   const [rememberSession, setRememberSession] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -47,6 +56,9 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="admin-login-modal-title"
       style={{
         position: 'fixed',
         inset: 0,
@@ -92,17 +104,19 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
             right: '1.25rem',
             background: 'transparent',
             border: 'none',
-            color: 'var(--text-dim)',
+            color: 'var(--text-secondary)',
             cursor: 'pointer',
-            padding: '4px',
+            padding: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'color 0.2s',
+            minHeight: '40px',
+            minWidth: '40px',
           }}
-          aria-label="Close modal"
+          aria-label="Close CMS login gateway"
         >
-          <X size={18} />
+          <X size={18} aria-hidden="true" />
         </button>
 
         <div style={{ padding: '2.5rem 2rem 2.25rem 2rem' }}>
@@ -139,6 +153,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
             </div>
 
             <h2
+              id="admin-login-modal-title"
               style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: '1.55rem',
@@ -158,6 +173,8 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
           {/* Error Alert */}
           {error && (
             <div
+              role="alert"
+              aria-live="assertive"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -171,7 +188,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                 marginBottom: '1.25rem',
               }}
             >
-              <ShieldAlert size={16} style={{ flexShrink: 0 }} />
+              <ShieldAlert size={16} aria-hidden="true" style={{ flexShrink: 0 }} />
               <span>{error}</span>
             </div>
           )}
@@ -181,6 +198,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
                 <label
+                  htmlFor="admin-access-key"
                   style={{
                     fontSize: '0.7rem',
                     letterSpacing: '0.14em',
@@ -194,6 +212,7 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                 <button
                   type="button"
                   onClick={handleQuickFill}
+                  aria-label="Auto-fill demo access key"
                   style={{
                     background: 'none',
                     border: 'none',
@@ -208,15 +227,17 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                     textDecoration: 'underline',
                   }}
                 >
-                  <KeyRound size={11} />
+                  <KeyRound size={11} aria-hidden="true" />
                   <span>Auto-Fill Demo Key</span>
                 </button>
               </div>
 
               <div style={{ position: 'relative' }}>
                 <input
+                  id="admin-access-key"
                   type={showPassword ? 'text' : 'password'}
                   required
+                  aria-required="true"
                   autoFocus
                   value={accessKey}
                   placeholder="Enter key (e.g. encinas2026)"
@@ -233,16 +254,19 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                     outline: 'none',
                     boxSizing: 'border-box',
                     transition: 'border-color 0.2s',
+                    minHeight: '44px',
                   }}
                 />
                 <Lock
                   size={15}
                   color="var(--gold-primary)"
+                  aria-hidden="true"
                   style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password characters' : 'Show password characters'}
                   style={{
                     position: 'absolute',
                     right: '0.9rem',
@@ -250,14 +274,14 @@ export const AdminLoginModal: FC<AdminLoginModalProps> = ({ isOpen, onClose, onS
                     transform: 'translateY(-50%)',
                     background: 'none',
                     border: 'none',
-                    color: 'var(--text-dim)',
+                    color: 'var(--text-secondary)',
                     cursor: 'pointer',
                     padding: '4px',
                     display: 'flex',
                     alignItems: 'center',
                   }}
                 >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  {showPassword ? <EyeOff size={15} aria-hidden="true" /> : <Eye size={15} aria-hidden="true" />}
                 </button>
               </div>
             </div>

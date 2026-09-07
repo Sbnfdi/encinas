@@ -100,6 +100,8 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
 
         {/* Communities Ribbon Stepper */}
         <div
+          role="tablist"
+          aria-label="Dubai Iconic Territories"
           style={{
             display: 'flex',
             gap: '1.25rem',
@@ -114,6 +116,10 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
             return (
               <button
                 key={c.id}
+                role="tab"
+                id={`community-tab-${c.id}`}
+                aria-controls={`community-panel-${c.id}`}
+                aria-selected={isSelected}
                 onClick={() => setUserSelectedIdx(i)}
                 style={{
                   background: 'none',
@@ -125,16 +131,17 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
                   fontFamily: 'var(--font-serif)',
                   fontSize: '0.95rem',
                   letterSpacing: '0.08em',
-                  color: isSelected ? 'var(--gold-light)' : 'rgba(255,255,255,0.35)',
+                  color: isSelected ? 'var(--gold-light)' : 'var(--text-dim)',
                   transition: 'all 0.3s ease',
                   whiteSpace: 'nowrap',
-                  padding: '0.2rem 0',
+                  padding: '0.35rem 0.2rem',
+                  minHeight: '40px',
                 }}
               >
                 <span
                   style={{
                     fontSize: '0.75rem',
-                    color: isSelected ? 'var(--gold-primary)' : 'rgba(255,255,255,0.2)',
+                    color: isSelected ? 'var(--gold-primary)' : 'rgba(255,255,255,0.3)',
                     fontWeight: 600,
                   }}
                 >
@@ -159,10 +166,13 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
 
         {/* Grid: Details & Lifestyle Highlights */}
         <div
+          role="tabpanel"
+          id={`community-panel-${currentComm.id}`}
+          aria-labelledby={`community-tab-${currentComm.id}`}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '3rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+            gap: '3.5rem',
             alignItems: 'center',
           }}
         >
@@ -259,10 +269,11 @@ export const CommunityTimelineScene: FC<CommunityTimelineSceneProps> = ({
 
             <button
               onClick={() => onSelectCommunity(currentComm)}
+              aria-label={`Inspect ${currentComm.name} assets in portfolio repertory`}
               className="btn-gold"
             >
               <span>INSPECT {currentComm.name} ASSETS</span>
-              <ArrowUpRight size={15} />
+              <ArrowUpRight size={15} aria-hidden="true" />
             </button>
           </div>
 

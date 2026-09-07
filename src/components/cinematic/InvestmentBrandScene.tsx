@@ -209,6 +209,7 @@ export const InvestmentBrandScene: FC<InvestmentBrandSceneProps> = ({
         <div style={{ display: 'flex', gap: '1rem' }}>
           <button
             onClick={onOpenConsultation}
+            aria-label={scene.ctaLabel || 'Schedule Private Consultation'}
             className="btn-gold"
           >
             <span>{scene.ctaLabel || 'SCHEDULE PRIVATE CONSULTATION'}</span>

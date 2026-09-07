@@ -76,6 +76,8 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
 
         {/* Developer Chronological Rail */}
         <div
+          role="tablist"
+          aria-label="Master Architects and Developers"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
@@ -90,6 +92,10 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
             return (
               <button
                 key={dev.id}
+                role="tab"
+                id={`dev-tab-${dev.id}`}
+                aria-controls={`dev-panel-${dev.id}`}
+                aria-selected={isActive}
                 onClick={() => setUserSelectedIdx(idx)}
                 style={{
                   background: isActive ? 'rgba(197, 168, 128, 0.12)' : 'rgba(255, 255, 255, 0.02)',
@@ -100,9 +106,10 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   boxShadow: isActive ? '0 0 16px rgba(197, 168, 128, 0.15)' : 'none',
+                  minHeight: '44px',
                 }}
               >
-                <div style={{ fontSize: '0.65rem', color: isActive ? 'var(--gold-primary)' : 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-serif)' }}>
+                <div style={{ fontSize: '0.65rem', color: isActive ? 'var(--gold-primary)' : 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-serif)' }}>
                   0{idx + 1}
                 </div>
                 <div
@@ -110,7 +117,7 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
                     fontFamily: 'var(--font-sans)',
                     fontWeight: 600,
                     fontSize: '0.85rem',
-                    color: isActive ? 'var(--gold-light)' : 'rgba(255,255,255,0.6)',
+                    color: isActive ? 'var(--gold-light)' : 'var(--text-secondary)',
                     marginTop: '0.2rem',
                     letterSpacing: '0.05em',
                   }}
@@ -124,9 +131,12 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
 
         {/* Active Developer Stage Focus */}
         <div
+          role="tabpanel"
+          id={`dev-panel-${currentDev.id}`}
+          aria-labelledby={`dev-tab-${currentDev.id}`}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
             gap: '3.5rem',
             alignItems: 'center',
           }}
@@ -224,10 +234,11 @@ export const DeveloperTimelineScene: FC<DeveloperTimelineSceneProps> = ({
 
             <button
               onClick={() => onSelectDeveloper(currentDev)}
+              aria-label={`Request direct boardroom allocation for ${currentDev.name}`}
               className="btn-gold"
             >
               <span>DIRECT BOARDROOM ALLOCATION</span>
-              <ChevronRight size={15} />
+              <ChevronRight size={15} aria-hidden="true" />
             </button>
           </div>
 

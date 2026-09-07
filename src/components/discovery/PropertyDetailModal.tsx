@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import type { Property, Currency } from '../../types';
 import { formatPriceInCurrency } from '../../types';
@@ -19,10 +19,21 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'narrative' | 'architecture' | 'amenities' | 'payment' | 'gallery'>('narrative');
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   if (!property) return null;
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="property-detail-modal-title"
       style={{
         position: 'fixed',
         inset: 0,
@@ -40,13 +51,14 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           position: 'sticky',
           top: 0,
           zIndex: 40,
-          background: 'rgba(8, 8, 8, 0.88)',
+          background: 'rgba(8, 8, 8, 0.92)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(197, 168, 128, 0.25)',
           padding: '1rem 4vw',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '1rem',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -54,14 +66,18 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
             <span style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-primary)' }}>
               {property.developer} • {property.community}
             </span>
-            <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', color: '#FFF', fontWeight: 600 }}>
+            <h2 id="property-detail-modal-title" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', color: '#FFF', fontWeight: 600 }}>
               {property.title}
-            </span>
+            </h2>
           </div>
         </div>
 
         {/* Stepper Tabs */}
-        <div className="hidden lg:flex items-center gap-2" style={{ display: 'flex', gap: '0.5rem' }}>
+        <div
+          role="tablist"
+          aria-label="Property detail sections"
+          className="lg:flex hidden items-center gap-2"
+        >
           {[
             { id: 'narrative', label: '01 OVERVIEW' },
             { id: 'architecture', label: '02 ARCHITECTURE' },
@@ -71,6 +87,9 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           ].map((tab) => (
             <button
               key={tab.id}
+              role="tab"
+              id={`prop-tab-${tab.id}`}
+              aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               style={{
                 background: activeTab === tab.id ? 'rgba(197, 168, 128, 0.15)' : 'transparent',
@@ -89,22 +108,24 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button
             onClick={() => onInquire(property)}
+            aria-label={`Reserve allocation for ${property.title}`}
             className="btn-gold"
-            style={{ padding: '0.6rem 1.4rem', fontSize: '0.75rem' }}
+            style={{ padding: '0.6rem 1.25rem', fontSize: '0.75rem', minHeight: '40px' }}
           >
             <span>RESERVE ALLOCATION</span>
-            <ChevronRight size={14} />
+            <ChevronRight size={14} aria-hidden="true" />
           </button>
 
           <button
             onClick={onClose}
+            aria-label="Close property details modal"
             className="glass-pill"
             style={{
-              width: '38px',
-              height: '38px',
+              width: '42px',
+              height: '42px',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
@@ -115,7 +136,7 @@ export const PropertyDetailModal: FC<PropertyDetailModalProps> = ({
             }}
             title="Close modal"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
       </div>

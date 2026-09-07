@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FC, FormEvent } from 'react';
 import type { TimelineScene, Property, Community, Developer, ConsultationInquiry, SceneType } from '../../types';
 import {
@@ -47,6 +47,16 @@ export const AdminPortal: FC<AdminPortalProps> = ({
   onPreviewScene,
 }) => {
   const [activeTab, setActiveTab] = useState<'timeline' | 'inventory' | 'leads'>('timeline');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCloseAdmin();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onCloseAdmin]);
 
   // Notification Toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -172,6 +182,9 @@ export const AdminPortal: FC<AdminPortalProps> = ({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Encinas Operational CMS Master Desk"
       style={{
         position: 'fixed',
         inset: 0,
@@ -257,8 +270,10 @@ export const AdminPortal: FC<AdminPortalProps> = ({
           <div style={{ height: '22px', width: '1px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
 
           {/* Navigation Tabs */}
-          <nav style={{ display: 'flex', gap: '0.5rem' }}>
+          <nav role="tablist" aria-label="CMS Management Sections" style={{ display: 'flex', gap: '0.5rem' }}>
             <button
+              role="tab"
+              aria-selected={activeTab === 'timeline'}
               onClick={() => setActiveTab('timeline')}
               style={{
                 background: activeTab === 'timeline' ? 'rgba(197, 168, 128, 0.15)' : 'transparent',
@@ -276,7 +291,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
                 transition: 'all 0.2s ease',
               }}
             >
-              <Film size={14} color="var(--gold-primary)" />
+              <Film size={14} color="var(--gold-primary)" aria-hidden="true" />
               <span>TIMELINE BUILDER</span>
               <span
                 style={{
@@ -292,6 +307,8 @@ export const AdminPortal: FC<AdminPortalProps> = ({
             </button>
 
             <button
+              role="tab"
+              aria-selected={activeTab === 'inventory'}
               onClick={() => setActiveTab('inventory')}
               style={{
                 background: activeTab === 'inventory' ? 'rgba(197, 168, 128, 0.15)' : 'transparent',
@@ -309,7 +326,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
                 transition: 'all 0.2s ease',
               }}
             >
-              <Layers size={14} color="var(--gold-primary)" />
+              <Layers size={14} color="var(--gold-primary)" aria-hidden="true" />
               <span>PROPERTY INVENTORY</span>
               <span
                 style={{
@@ -325,6 +342,8 @@ export const AdminPortal: FC<AdminPortalProps> = ({
             </button>
 
             <button
+              role="tab"
+              aria-selected={activeTab === 'leads'}
               onClick={() => setActiveTab('leads')}
               style={{
                 background: activeTab === 'leads' ? 'rgba(197, 168, 128, 0.15)' : 'transparent',
@@ -342,7 +361,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
                 transition: 'all 0.2s ease',
               }}
             >
-              <Mail size={14} color="var(--gold-primary)" />
+              <Mail size={14} color="var(--gold-primary)" aria-hidden="true" />
               <span>VIP MANDATES</span>
               <span
                 style={{
@@ -364,6 +383,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
           <button
             onClick={onCloseAdmin}
+            aria-label="Close CMS and view live portal"
             className="btn-gold"
             style={{
               padding: '0.45rem 1rem',
@@ -371,12 +391,13 @@ export const AdminPortal: FC<AdminPortalProps> = ({
               letterSpacing: '0.14em',
             }}
           >
-            <Eye size={14} />
+            <Eye size={14} aria-hidden="true" />
             <span>VIEW LIVE PORTAL</span>
           </button>
 
           <button
             onClick={onLogout}
+            aria-label="Sign out of CMS session"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -394,7 +415,7 @@ export const AdminPortal: FC<AdminPortalProps> = ({
             }}
             title="Sign out of CMS session"
           >
-            <LogOut size={13} />
+            <LogOut size={13} aria-hidden="true" />
             <span>SIGN OUT</span>
           </button>
         </div>
