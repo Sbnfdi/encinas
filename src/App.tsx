@@ -28,6 +28,7 @@ import { AdminPortal } from './components/admin/AdminPortal';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { TimelineIndicator } from './components/cinematic/TimelineIndicator';
 import { Settings, Lock, Compass, ArrowDown, Menu, X } from 'lucide-react';
+import { submitInquiryToTurso, fetchInquiriesFromTurso } from './lib/tursoClient';
 
 export function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -147,6 +148,16 @@ export function App() {
     localStorage.setItem('encinas_timeline_scenes', JSON.stringify(updated));
   };
 
+  // Sync inquiries from Turso on mount
+  useEffect(() => {
+    fetchInquiriesFromTurso().then((tursoInquiries) => {
+      if (tursoInquiries && tursoInquiries.length > 0) {
+        setInquiries(tursoInquiries);
+        localStorage.setItem('encinas_inquiries', JSON.stringify(tursoInquiries));
+      }
+    });
+  }, []);
+
   const handleUpdateProperties = (updated: Property[]) => {
     setProperties(updated);
     localStorage.setItem('encinas_properties', JSON.stringify(updated));
@@ -166,6 +177,12 @@ export function App() {
     };
     const updated = [newInq, ...inquiries];
     handleUpdateInquiries(updated);
+
+    // Sync to Turso database in the background
+    submitInquiryToTurso(newInq).catch((err) => {
+      console.warn('Could not sync inquiry to Turso:', err);
+    });
+
     return true;
   };
 
